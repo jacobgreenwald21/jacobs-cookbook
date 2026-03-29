@@ -306,7 +306,7 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 // ── ADMIN CONFIG ────────────────────────────────────────────────────────────
 // To find your UID: sign in, open browser console, type: firebase.auth().currentUser.uid
 // Then replace the string below with your UID
-const ADMIN_UID = 'REPLACE_WITH_YOUR_UID';
+const ADMIN_UID = 'Ilqx5bsdUMdLQg9hPfDGIrZ7NXB3';
 
 // ── CONSTANTS ───────────────────────────────────────────────────────────────
 const RECIPES_KEY = 'cookbook_recipes_v2';
@@ -364,8 +364,8 @@ function updateAuthUI() {
   const area = document.getElementById('auth-area');
   const aiBtn = document.getElementById('nav-ai');
 
-  // Show AI Generate tab only for admin
-  aiBtn.style.display = isAdmin ? 'inline-block' : 'none';
+  // Show AI Generate tab for any signed-in user
+  aiBtn.style.display = currentUser ? 'inline-block' : 'none';
 
   if (!currentUser) {
     area.innerHTML = `<button class="auth-btn" onclick="signIn()">
@@ -540,7 +540,7 @@ function renderDetail(id) {
     ? `<button class="detail-fav ${isFav?'active':''}" onclick="toggleFav('${r.id}')">${isFav?'★ Favorited':'☆ Favorite'}</button>`
     : `<button class="detail-fav" onclick="showToast('Sign in to save favorites')" style="opacity:0.5">☆ Favorite</button>`;
 
-  const editBtn = isAdmin ? `<button class="nav-btn" onclick="renderEditDetail('${r.id}')">Edit</button>` : '';
+  const editBtn = currentUser ? `<button class="nav-btn" onclick="renderEditDetail('${r.id}')">Edit</button>` : '';
 
   document.getElementById('detail-content').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
@@ -567,7 +567,7 @@ function renderDetail(id) {
 }
 
 function renderEditDetail(id) {
-  if (!isAdmin) return;
+  if (!currentUser) return;
   const r = recipes.find(x => x.id === id);
   if (!r) return;
   document.getElementById('detail-content').innerHTML = `
@@ -589,14 +589,14 @@ function renderEditDetail(id) {
       <div class="draft-field"><div class="draft-field-label">Tags (comma separated)</div><input class="draft-input" id="e-tags" value="${(r.tags||[]).join(', ')}"></div>
       <div class="draft-actions">
         <button class="publish-btn" onclick="saveEdit('${r.id}')">Save Changes</button>
-        <button class="discard-btn" onclick="deleteRecipe('${r.id}')">Delete Recipe</button>
+        ${isAdmin ? `<button class="discard-btn" onclick="deleteRecipe('${r.id}')">Delete Recipe</button>` : ''}
       </div>
     </div>`;
   window.scrollTo(0,0);
 }
 
 function saveEdit(id) {
-  if (!isAdmin) return;
+  if (!currentUser) return;
   const idx = recipes.findIndex(x => x.id === id);
   if (idx === -1) return;
   recipes[idx] = { ...recipes[idx],
@@ -615,7 +615,7 @@ function saveEdit(id) {
 }
 
 function deleteRecipe(id) {
-  if (!isAdmin) return;
+  if (!isAdmin) { showToast('Only the admin can delete recipes'); return; }
   if (!confirm('Delete this recipe? This cannot be undone.')) return;
   recipes = recipes.filter(x => x.id !== id);
   saveRecipes(); applyFilters(); showPage('home'); showToast('Recipe deleted');
