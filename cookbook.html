@@ -99,7 +99,7 @@
 
   /* AI GENERATE PAGE */
   .ai-page { max-width: 780px; margin: 0 auto; padding: 2rem; }
-  .ai-header { margin-bottom: 2rem; }
+  .ai-header { margin-bottom: 1.5rem; }
   .ai-title { font-size: 1.8rem; margin-bottom: 0.4rem; }
   .ai-sub { color: var(--text2); font-size: 0.9rem; }
   .api-key-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
@@ -114,16 +114,26 @@
   .api-status.set { color: #6dbf8a; }
   .api-status.unset { color: var(--text3); }
 
-  .generate-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem; }
-  .form-label { font-size: 12px; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; font-weight: 500; display: block; }
-  .form-textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border2); color: var(--text); padding: 10px 14px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; resize: vertical; min-height: 90px; line-height: 1.5; }
-  .form-textarea:focus { border-color: var(--accent); }
-  .form-textarea::placeholder { color: var(--text3); }
-  .form-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-  .form-select { background: var(--surface2); border: 1px solid var(--border2); color: var(--text); padding: 8px 12px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; flex: 1; min-width: 120px; }
-  .generate-btn { background: var(--accent); color: #0f0f0f; border: none; padding: 10px 22px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; margin-top: 14px; transition: all 0.15s; }
-  .generate-btn:hover:not(:disabled) { background: var(--accent2); color: #fff; }
-  .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  /* CHAT */
+  .chat-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; margin-bottom: 1.5rem; }
+  .chat-messages { padding: 1.25rem; display: flex; flex-direction: column; gap: 14px; min-height: 200px; max-height: 480px; overflow-y: auto; }
+  .chat-msg { max-width: 82%; line-height: 1.55; font-size: 14px; }
+  .chat-msg.assistant { align-self: flex-start; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px 14px 14px 14px; padding: 10px 14px; color: var(--text); white-space: pre-wrap; }
+  .chat-msg.user { align-self: flex-end; background: rgba(200,169,110,0.15); border: 1px solid rgba(200,169,110,0.25); border-radius: 14px 4px 14px 14px; padding: 10px 14px; color: var(--text); }
+  .chat-msg.thinking { align-self: flex-start; color: var(--text3); font-style: italic; font-size: 13px; padding: 4px 0; }
+  .chat-input-row { border-top: 1px solid var(--border); display: flex; gap: 0; }
+  .chat-input { flex: 1; background: transparent; border: none; color: var(--text); padding: 12px 16px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; resize: none; min-height: 48px; max-height: 120px; line-height: 1.5; }
+  .chat-input::placeholder { color: var(--text3); }
+  .chat-send-btn { background: var(--accent); color: #0f0f0f; border: none; padding: 0 18px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: background 0.15s; flex-shrink: 0; }
+  .chat-send-btn:hover:not(:disabled) { background: var(--accent2); color: #fff; }
+  .chat-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .chat-controls { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: space-between; align-items: center; }
+  .gen-recipe-btn { background: var(--green); color: #fff; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; transition: opacity 0.15s; }
+  .gen-recipe-btn:hover:not(:disabled) { opacity: 0.85; }
+  .gen-recipe-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .new-chat-btn { background: none; border: 1px solid var(--border2); color: var(--text3); padding: 7px 14px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.15s; }
+  .new-chat-btn:hover { border-color: var(--border2); color: var(--text2); }
+  .chat-hint { font-size: 12px; color: var(--text3); }
 
   .draft-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; }
   .draft-title { font-size: 1.1rem; margin-bottom: 1.2rem; color: var(--text2); font-family: 'DM Sans', sans-serif; font-weight: 400; }
@@ -142,12 +152,9 @@
   .discard-btn { background: none; border: 1px solid var(--border2); color: var(--text3); padding: 10px 18px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; transition: all 0.15s; }
   .discard-btn:hover { border-color: var(--red); color: #d08080; }
 
-  .loading-spinner { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 2.5rem; color: var(--text2); font-size: 14px; }
-  .spinner { width: 28px; height: 28px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  .spinner { width: 16px; height: 16px; border: 2px solid var(--border2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .error-box { background: rgba(140,74,74,0.15); border: 1px solid rgba(140,74,74,0.35); border-radius: var(--radius); padding: 1rem 1.2rem; color: #d08080; font-size: 13px; margin-bottom: 1rem; }
-  .success-box { background: rgba(74,140,92,0.15); border: 1px solid rgba(74,140,92,0.3); border-radius: var(--radius); padding: 0.8rem 1.2rem; color: #6dbf8a; font-size: 13px; margin-bottom: 1rem; }
 
   /* TOAST */
   .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--surface2); border: 1px solid var(--border2); color: var(--text); padding: 12px 18px; border-radius: var(--radius); font-size: 13px; z-index: 999; animation: slideup 0.2s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
@@ -164,7 +171,21 @@
     .home-title { font-size: 1.7rem; }
     .draft-row { flex-direction: column; }
   }
+  /* AUTH */
+  .auth-btn { background: var(--surface2); border: 1px solid var(--border2); color: var(--text2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; display: flex; align-items: center; gap: 7px; transition: all 0.15s; }
+  .auth-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .auth-btn img { width: 16px; height: 16px; border-radius: 50%; }
+  .auth-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border2); cursor: pointer; }
+  .auth-dropdown { position: relative; }
+  .auth-menu { position: absolute; right: 0; top: calc(100% + 8px); background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); min-width: 180px; z-index: 200; overflow: hidden; }
+  .auth-menu-item { padding: 10px 14px; font-size: 13px; color: var(--text2); cursor: pointer; display: block; width: 100%; text-align: left; background: none; border: none; font-family: 'DM Sans', sans-serif; transition: background 0.1s; }
+  .auth-menu-item:hover { background: var(--surface); color: var(--text); }
+  .auth-menu-name { padding: 10px 14px; font-size: 12px; color: var(--text3); border-bottom: 1px solid var(--border); }
+  .admin-badge { background: rgba(200,169,110,0.15); color: var(--accent); border: 1px solid rgba(200,169,110,0.3); padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -172,7 +193,13 @@
   <div class="nav-brand" onclick="showPage('home')">Jacob's Cookbook</div>
   <div class="nav-links">
     <button class="nav-btn active" id="nav-home" onclick="showPage('home')">Recipes</button>
-    <button class="nav-btn" id="nav-ai" onclick="showPage('ai')">AI Generate</button>
+    <button class="nav-btn" id="nav-ai" onclick="showPage('ai')" style="display:none">AI Generate</button>
+    <div class="auth-dropdown" id="auth-area">
+      <button class="auth-btn" id="auth-btn" onclick="signIn()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2.5 13.5c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Sign in
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -230,7 +257,7 @@
   <div class="ai-page">
     <div class="ai-header">
       <h1 class="ai-title">AI Recipe Generator</h1>
-      <p class="ai-sub">Describe what you want and Claude will generate a recipe for your cookbook.</p>
+      <p class="ai-sub">Chat with Claude to build a recipe around your preferences, then publish it to your cookbook.</p>
     </div>
 
     <div class="api-key-section">
@@ -242,32 +269,19 @@
       <div class="api-status" id="api-status"></div>
     </div>
 
-    <div class="generate-form">
-      <label class="form-label" for="prompt-input">What do you want to make?</label>
-      <textarea class="form-textarea" id="prompt-input" placeholder="e.g. 'Quick chicken dinner with vegetables' or 'Something with salmon and orzo' or 'High protein breakfast under 30 minutes'"></textarea>
-      <div class="form-row">
-        <select class="form-select" id="gen-meal">
-          <option value="">Any meal type</option>
-          <option value="breakfast">Breakfast</option>
-          <option value="lunch">Lunch</option>
-          <option value="dinner">Dinner</option>
-          <option value="snack">Snack</option>
-          <option value="dessert">Dessert</option>
-        </select>
-        <select class="form-select" id="gen-diff">
-          <option value="">Any difficulty</option>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-        <select class="form-select" id="gen-time">
-          <option value="">Any time</option>
-          <option value="20">Under 20 min</option>
-          <option value="30">Under 30 min</option>
-          <option value="45">Under 45 min</option>
-        </select>
+    <div class="chat-wrap">
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chat-input" placeholder="Tell Claude what you want to make..." rows="1" onkeydown="chatKeydown(event)"></textarea>
+        <button class="chat-send-btn" id="chat-send" onclick="sendChat()">Send</button>
       </div>
-      <button class="generate-btn" id="gen-btn" onclick="generateRecipe()">Generate Recipe</button>
+      <div class="chat-controls">
+        <div class="chat-hint" id="chat-hint">Start by describing what you want to make.</div>
+        <div style="display:flex;gap:8px;">
+          <button class="new-chat-btn" onclick="resetChat()">New chat</button>
+          <button class="gen-recipe-btn" id="gen-recipe-btn" onclick="finalizeRecipe()" disabled>Generate Recipe</button>
+        </div>
+      </div>
     </div>
 
     <div id="gen-error"></div>
@@ -276,12 +290,27 @@
 </div>
 
 <script>
-const RECIPES_KEY = 'cookbook_recipes_v2';
-const FAVS_KEY = 'cookbook_favs';
-const API_KEY_STORE = 'cookbook_api_key';
+// ── FIREBASE INIT ──────────────────────────────────────────────────────────
+firebase.initializeApp({
+  apiKey: "AIzaSyDilCyclXc-7WFrodgSQTXxj-nFQ46sWv8",
+  authDomain: "jacobs-cookbook.firebaseapp.com",
+  projectId: "jacobs-cookbook",
+  storageBucket: "jacobs-cookbook.firebasestorage.app",
+  messagingSenderId: "189328116988",
+  appId: "1:189328116988:web:7c9658ad88d1f324f85b79"
+});
+const auth = firebase.auth();
+const db = firebase.firestore();
+const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-// ── SEED DATA ──────────────────────────────────────────────────────────────
-const SEED = [{"id":"69c6b967b85bcac1cc9d5c6f","title":"Baked Chicken Parmesan with Spaghetti","slug":"baked-chicken-parmesan-with-spaghetti","description":"A quick and easy recipe for baked chicken parmesan served with spaghetti, perfect for a single serving meal.","meal_type":"dinner","difficulty":"easy","servings":"1 serving","total_time_minutes":40,"prep_time_minutes":25,"cook_time_minutes":31,"tags":["chicken","parmesan","spaghetti","baked","italian"],"ingredients":["1 chicken breast, halved","Salt","Black pepper","1 whole egg","1/2 cup panko breadcrumbs","2 Tbsp grated parmesan","1/2 tsp garlic powder","1/2 tsp Italian seasoning","1/2 cup marinara sauce","1/3 cup shredded mozzarella","Olive oil (for drizzling or spraying)","2 oz thin spaghetti","Salt (for water)"],"steps":["Preheat oven to 425°F. Line a baking sheet with parchment paper or lightly grease.","Pat chicken dry and season with salt and pepper.","In one bowl, beat the egg. In another, combine panko, parmesan, garlic powder, and Italian seasoning.","Dip chicken into egg, then coat thoroughly in breadcrumb mixture. Place on baking sheet. Lightly drizzle or spray with olive oil.","Bake for 15 minutes.","Remove from oven, spoon marinara over each piece, and top with mozzarella.","Return to oven and bake another 5-7 minutes until cheese is melted and chicken reaches 165°F.","While chicken bakes, bring a pot of salted water to a boil. Cook spaghetti according to package instructions (about 7-9 minutes). Drain.","Plate spaghetti, top with chicken parmesan, and spoon extra sauce over if desired."],"status":"published","published_at":"2026-03-27T17:07:50.952Z","created_date":"2026-03-27T17:07:51.059000"},{"id":"69c58dce91371f12e5fea7e4","title":"Honey Glazed Carrots with Lemon Garlic Chicken","slug":"honey-glazed-carrots-with-lemon-garlic-chicken","description":"This recipe features tender honey-glazed carrots roasted to perfection alongside pan-seared lemon-garlic chicken breasts. A simple pan sauce is made from the chicken drippings to tie the dish together.","meal_type":"dinner","difficulty":"medium","servings":"2 servings","total_time_minutes":35,"prep_time_minutes":20,"cook_time_minutes":30,"tags":["chicken","carrots","honey glazed","lemon garlic","pan-seared","roasted"],"ingredients":["1 lb baby carrots","1 Tbsp olive oil","1 1/2 Tbsp honey","1 Tbsp butter","Salt","Black pepper","2 chicken breasts (halved horizontally)","Salt","Black pepper","1/2 tsp garlic powder","1/2 tsp paprika","Pinch chili flakes","1 Tbsp olive oil","2-3 Tbsp chicken broth","1-2 Tbsp lemon juice","1 Tbsp butter"],"steps":["Preheat oven to 425°F. Toss carrots with olive oil, honey, butter, salt, and pepper.","Spread the seasoned carrots on a sheet pan in a single layer.","Roast carrots for 25-30 minutes, stirring once halfway through, until tender and caramelized.","Pat chicken dry and season both sides with salt, pepper, garlic powder, paprika, and chili flakes.","When carrots have about 15 minutes left in their roasting time, heat a skillet over medium to medium-high heat and add olive oil.","Cook chicken 4-5 minutes on the first side without moving, then flip and cook for another 3-5 minutes until the internal temperature reaches 160-165°F.","Remove the chicken from the pan and let it rest.","In the same pan, add chicken broth and lemon juice, scrape up any browned bits from the bottom, and simmer for 1 minute.","Add butter to the pan sauce and swirl until it becomes glossy.","Slice chicken if desired, then plate it with the roasted carrots and spoon the pan sauce over the chicken."],"status":"published","published_at":"2026-03-26T19:49:34.625Z","created_date":"2026-03-26T19:49:34.758000"},{"id":"69bb16fcc025ceac2541623e","title":"Lemon and Garlic Chicken with Cherry Tomatoes","slug":"lemon-and-garlic-chicken-with-cherry-tomatoes","description":"This recipe features tender chicken breasts marinated in a zesty lemon-garlic mixture, then seared and finished with sweet cherry tomatoes. It's a quick and flavorful dish perfect for a weeknight meal.","meal_type":"dinner","difficulty":"easy","servings":"4 servings","total_time_minutes":75,"prep_time_minutes":10,"cook_time_minutes":11,"tags":["chicken","lemon","garlic","cherry tomatoes","skillet","marinade"],"ingredients":["2 Tbsp olive oil","3 Tbsp lemon juice","2 garlic cloves, minced","1 tsp rosemary","Salt","Black pepper","2 boneless skinless chicken breasts","2 Tbsp flour","Salt","Black pepper","2 Tbsp canola oil","1/4 cup chicken stock","3/4 lb cherry tomatoes","Pinch white sugar","Salt","1 Tbsp parsley","Parmesan"],"steps":["Stir olive oil, lemon juice, garlic, rosemary, salt, and pepper in a bowl.","Cut each chicken breast into 2 equal pieces. Add to marinade, cover, and refrigerate for 30 minutes.","Remove chicken, pat dry, and pound to about 1/4 inch thickness.","Season lightly with salt and pepper, then dredge in flour, shaking off excess.","Preheat oven to low (to keep chicken warm).","Heat skillet over high heat. Add canola oil.","Cook chicken about 90 seconds per side until browned. Transfer to sheet pan and keep warm in oven.","Reduce heat to medium-high. Deglaze pan with chicken stock, scraping browned bits.","Add cherry tomatoes and cook about 8 minutes, stirring frequently, until softened.","Add a pinch of sugar and salt to taste.","Remove chicken from oven. Top with tomato mixture.","Garnish with parsley and parmesan and serve."],"status":"published","published_at":"2026-03-18T21:19:55.732Z","created_date":"2026-03-18T21:19:56.056000"},{"id":"69bb15dca55b7e636c89355a","title":"Baked Hot Honey Chicken","slug":"baked-hot-honey-chicken","description":"This recipe features tender boneless, skinless chicken baked to golden perfection and then drizzled with a sweet and spicy hot honey sauce.","meal_type":"dinner","difficulty":"easy","servings":"2–4 servings","total_time_minutes":35,"prep_time_minutes":15,"cook_time_minutes":22,"tags":["chicken","hot honey","baked","spicy","easy"],"ingredients":["1 lb boneless, skinless chicken (breast or thighs)","Salt","Black pepper","Garlic powder","Paprika","1-2 eggs","1 cup breadcrumbs or panko","1/4-1/3 cup honey","1-2 Tbsp hot sauce","1 Tbsp butter (optional)","Pinch chili flakes or cayenne (optional)"],"steps":["Preheat oven to 400–425°F. Line a baking sheet with parchment paper or lightly grease.","Season chicken with salt, pepper, garlic powder, and paprika.","Prepare two bowls: one with beaten eggs and one with breadcrumbs.","Dip chicken into egg, then coat fully in breadcrumbs. Place on baking sheet.","Bake for 18-22 minutes, until chicken reaches 165°F and coating is golden.","While chicken bakes, combine honey, hot sauce, butter, and chili flakes in a small pan. Warm over low heat until smooth.","Remove chicken from oven and drizzle with hot honey sauce. Serve immediately."],"status":"published","published_at":"2026-03-18T21:15:08.677Z","created_date":"2026-03-18T21:15:08.827000"},{"id":"69bb1545fb3cac9d0999d3c2","title":"Honey Lemon Soy Chicken","slug":"honey-lemon-soy-chicken","description":"This recipe features tender boneless, skinless chicken thighs marinated in a honey lemon soy sauce, air-fried to perfection, and served alongside roasted broccoli.","meal_type":"dinner","difficulty":"easy","servings":"2-3 servings","total_time_minutes":45,"prep_time_minutes":25,"cook_time_minutes":20,"tags":["chicken","honey","lemon","soy","broccoli","air fryer","roasted"],"ingredients":["1/4 cup honey","2 Tbsp lemon juice","2 Tbsp Dale's Reduced Sodium Marinade (Gluten Free)","Salt and pepper to taste","Boneless, skinless chicken thighs","Medium broccoli florets","Olive oil","Salt","Black pepper","Garlic powder","Chili flakes","Splash of lemon juice"],"steps":["Whisk honey, lemon juice, Dale's marinade, salt, and pepper until smooth. Marinate chicken for at least 30 minutes. Reserve a portion before adding raw chicken if using as a glaze. Simmer reserved marinade 3-5 minutes until slightly thickened.","Preheat air fryer to 400°F. Place marinated chicken thighs in air fryer and cook 16 minutes, flipping halfway if desired, until internal temperature reaches 175°F. Brush with glaze during last few minutes or immediately after cooking.","Preheat oven to 425°F. Toss broccoli with olive oil, salt, pepper, garlic powder, and chili flakes. Spread onto baking sheet and press down firmly using a mixing bowl to maximize contact with the pan. Roast for 20 minutes until browned. Finish with a splash of lemon juice before serving."],"status":"published","published_at":"2026-03-18T21:12:36.930Z","created_date":"2026-03-18T21:12:37.084000"},{"id":"69a61051f1aad28b89542f82","title":"Salmon and Sweet Potato","slug":"salmon-and-sweet-potato","description":"This recipe features salmon fillets and sweet potatoes, seasoned and baked, with a mustard and brown sugar glaze for the salmon.","meal_type":"dinner","difficulty":"easy","servings":"2","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["dinner","salmon","sweet potato"],"ingredients":["2 salmon fillets","2 medium sweet potatoes","2 tbsp olive oil","salt","black pepper","1 tsp dried rosemary","1/2 tsp onion powder","1/2 tsp garlic powder","1 tbsp dijon mustard","1.5 tbsp brown sugar"],"steps":["Preheat oven to 400 degrees Fahrenheit.","Dice sweet potatoes into 1-inch cubes.","Toss sweet potatoes with 1 tbsp olive oil, salt, pepper, garlic power, and onion powder.","Bake for 15 minutes until they begin to soften.","Combine mustard and brown sugar.","Drizzle salmon with olive oil and season with salt and pepper.","Brush brown sugar mix onto salmon.","Remove potatoes and move to side of sheet.","Place salmon fillets on.","Cook for another 10-15 minutes (flakes easily with fork)."],"status":"published","published_at":"2026-03-02T22:33:53.230Z","created_date":"2026-03-02T22:33:53.373000"},{"id":"69a6102d516898c59dd7dd55","title":"Chicken with Mushroom Pan Sauce","slug":"chicken-with-mushroom-pan-sauce","description":"A flavorful chicken dish featuring skin-on chicken thighs seared to perfection and finished with a rich mushroom pan sauce.","meal_type":"dinner","difficulty":"medium","servings":"6 servings","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["chicken","mushroom","pan sauce","dinner"],"ingredients":["6 skin on chicken thighs","2 packs mushrooms","2 garlic cloves, minced","1 shallot, minced","1 1/2 cups chicken stock","1/2 cup heavy cream","1 1/2 tbsp olive oil","salt","black pepper","butter","thyme","lemon juice"],"steps":["Preheat oven to 375 degrees Fahrenheit.","Remove chicken from fridge, pat dry, season lightly with salt and pepper, and rest for 15 minutes.","Heat large skillet over medium-high heat.","Add oil and sear chicken until skin browned (5-6 minutes).","Flip and sear other side, then remove thighs and set aside.","Melt butter in skillet and saute mushrooms for 5-6 minutes, adding in garlic and shallots towards the end.","Add thyme, salt, and pepper and continue to saute for 1 minute.","Deglaze with chicken stock, scraping up all bits.","Reduce heat to simmer until stock has halved, add salt and pepper.","Nestle chicken thighs skin side up in pan, cover with mushroom sauce, and cook in oven for 15 minutes.","Remove from heat and remove chicken from skillet.","Add heavy cream and lemon juice to taste, and adjust stock/seasonings as needed.","Pour sauce back over chicken and serve."],"status":"published","published_at":"2026-03-02T22:33:17.230Z","created_date":"2026-03-02T22:33:17.325000"},{"id":"69a610173a72bba892c310f7","title":"Banana Protein Pancakes","slug":"banana-protein-pancakes","description":"A simple recipe for protein-packed banana pancakes, perfect for a healthy breakfast option.","meal_type":"breakfast","difficulty":"easy","servings":"Makes 10 pancakes","total_time_minutes":20,"prep_time_minutes":20,"cook_time_minutes":20,"tags":["banana","protein","pancakes","breakfast"],"ingredients":["3 large bananas","3 large eggs","1 scoop peanut butter","1/2 scoop vanilla protein powder","1/2 cup oats","honey","cinnamon"],"steps":["Pre-heat large pan on medium heat and spray with nonstick cooking spray.","Mash bananas with a fork.","Combine all ingredients in blender. Then, blend to desired consistency.","Pour batter into pan for small-medium pancakes.","Flip when bubbling and golden brown."],"status":"published","published_at":"2026-03-02T22:32:55.019Z","created_date":"2026-03-02T22:32:55.138000"},{"id":"69a60fff36c77fc9419bad52","title":"Banana Bread Muffins (with Chocolate Chips)","slug":"banana-bread-muffins-with-chocolate-chips","description":"A delicious recipe for banana bread muffins featuring chocolate chips, perfect for breakfast or a snack. These muffins are relatively easy to make and yield 24 servings.","meal_type":"snack","difficulty":"easy","servings":"Makes 24 muffins","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":20,"tags":["banana","muffin","chocolate chips","baking"],"ingredients":["3 large ripe bananas","2 cups all-purpose flour","3/4 cup brown sugar","1 teaspoon baking soda","1/2 teaspoon salt","1/2 teaspoon vanilla extract","1 stick butter, melted","2 large eggs","semi-sweet chocolate chips (minimum 1/3 cup)"],"steps":["Heat oven to 350 degrees F. Spray muffin tin with nonstick cooking spray.","Mash bananas until almost smooth in a medium mixing bowl with a fork. Set aside.","Whisk together flour, brown sugar, baking soda, and salt in a large mixing bowl. (If there are any lumps of brown sugar, rub them with your fingers to break them up.)","Melt butter.","Combine melted butter, eggs, vanilla extract, and mashed bananas with dry ingredient. Stir until a batter forms.","Add chocolate chips.","Spread batter evenly into greased muffin tray.","Bake until a toothpick inserted into the middle of the loaf comes out clean, about 20 minutes.","Cool muffins in tray for 10 minutes. Remove from tray and allow to cool completely on a wire rack."],"status":"published","published_at":"2026-03-02T22:32:31.512Z","created_date":"2026-03-02T22:32:31.602000"},{"id":"69a60fd7254e363bd957d440","title":"My Best Pumpkin Bread","slug":"my-best-pumpkin-bread","description":"Homemade pumpkin bread is a favorite fall recipe packed with sweet cinnamon spice, tons of pumpkin flavor, and optional chocolate chips.","meal_type":"dessert","difficulty":"easy","servings":"1 loaf","total_time_minutes":75,"prep_time_minutes":15,"cook_time_minutes":60,"tags":["pumpkin","bread","chocolate chips","fall","baked goods"],"ingredients":["1 and 3/4 cups (219g) all-purpose flour (spooned & leveled)","1 teaspoon baking soda","2 teaspoons ground cinnamon","1/4 teaspoon ground nutmeg*","1/4 teaspoon ground cloves*","1/4 teaspoon ground ginger*","3/4 teaspoon salt","2 large eggs, at room temperature","1/2 cup (100g) granulated sugar","3/4 cup (150g) packed light or dark brown sugar","1 and 1/2 cups (340g) pumpkin puree (canned or fresh)","1/2 cup (120ml) vegetable oil, canola oil, or melted coconut oil","1/4 cup (60ml) orange juice*","2/3 cup (120g) semi-sweet chocolate chips*"],"steps":["Adjust the oven rack to the lower third position and preheat the oven to 350°F (177°C). Grease a metal 9x5-inch loaf pan with non-stick spray.","In a large bowl, whisk the flour, baking soda, cinnamon, nutmeg, cloves, ginger, and salt together. In a medium bowl, whisk the eggs, granulated sugar, and brown sugar. Whisk in the pumpkin, oil, and orange juice. Pour wet into dry and gently mix. Fold in chocolate chips.","Pour the batter into the prepared loaf pan. Bake for 60-65 minutes, covering loosely with foil halfway through. Done when a toothpick comes out clean.","Allow the bread to cool completely in the pan before removing and slicing.","Cover and store at room temperature for up to 3–4 days, or refrigerate for up to a week."],"status":"published","published_at":"2026-03-02T22:31:51.763Z","created_date":"2026-03-02T22:31:51.870000"},{"id":"69a60fa4858dcec8d0a69886","title":"Roasted Brussels Sprouts with Balsamic Vinegar & Honey","slug":"roasted-brussels-sprouts-with-balsamic-vinegar-honey","description":"It's hard to improve on simple roasted Brussels sprouts, but a splash of balsamic vinegar and a drizzle of honey bring the flavors to life.","meal_type":"other","difficulty":"easy","servings":"6 servings","total_time_minutes":30,"prep_time_minutes":10,"cook_time_minutes":20,"tags":["brussels sprouts","roasted","balsamic vinegar","honey","vegetable","side dish"],"ingredients":["1½ pounds Brussels sprouts, halved, stems and ragged outer leaves removed","3 tablespoons extra virgin olive oil","½ teaspoon kosher salt","½ teaspoon freshly ground black pepper","1 tablespoon balsamic vinegar","1 teaspoon honey"],"steps":["Preheat oven to 425°F and set an oven rack in the middle position. Line a baking sheet with heavy-duty aluminum foil.","Directly on the prepared baking sheet, toss the Brussels sprouts with 2 tablespoons of the oil, the salt, and the pepper. Roast, stirring once halfway through, until tender and golden brown, about 20 minutes.","Drizzle the remaining tablespoon of oil, the balsamic vinegar and the honey over the roasted Brussels sprouts. Toss to coat evenly. Taste and adjust seasoning, if necessary, then serve.","If you have some brussels sprouts that are very large, cut them into quarters. They should all be cut about the same size to ensure even cooking."],"status":"published","published_at":"2026-03-02T22:31:00.215Z","created_date":"2026-03-02T22:31:00.354000"},{"id":"69a60f71294bacaf431dffc3","title":"Savory Lemon Orzo with Caramelized Onion","slug":"savory-lemon-orzo-with-caramelized-onion","description":"This savory orzo dish features sweet caramelized onions and a bright lemon flavor, designed to be cooked alongside salmon for a delicious and complete meal.","meal_type":"other","difficulty":"easy","servings":"Serves 2-4","total_time_minutes":21,"prep_time_minutes":5,"cook_time_minutes":16,"tags":["lemon","orzo","caramelized onion","side dish","quick"],"ingredients":["1 cup orzo","1/2-1 white onion, thinly sliced","1-2 Tbsp olive oil","Salt","Black pepper","1-2 Tbsp lemon juice","Optional: tiny splash soy sauce (1/2 tsp max)"],"steps":["Start the onions: Heat olive oil in a skillet over medium heat. Add sliced onion and a pinch of salt. Cook 10-12 minutes, stirring occasionally, until soft and lightly golden.","Cook the orzo: Bring a pot of well-salted water to a boil. Add orzo and cook 8-10 minutes until al dente. Drain (do not rinse).","Bake salmon: Place salmon in a 400°F oven and bake 12-14 minutes. Remove at 120-125°F internal temperature.","Combine: Add drained orzo to the skillet with onions. Stir in lemon juice, black pepper, and optional small splash soy sauce. Toss over low heat for 1-2 minutes. Adjust salt to taste.","Serve immediately with salmon."],"status":"published","published_at":"2026-03-02T22:30:09.565Z","created_date":"2026-03-02T22:30:09.766000"},{"id":"69a60e88b4a49f5a3cdf893c","title":"Creamy Mushroom Tomato Orzo with Crispy Skin Salmon","slug":"creamy-mushroom-tomato-orzo-with-crispy-skin-salmon","description":"This recipe features pan-seared salmon with crispy skin served over a creamy orzo base, rich with mushrooms, tomatoes, and spinach.","meal_type":"dinner","difficulty":"medium","servings":"Serves 2-4","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["salmon","orzo","mushrooms","tomato","creamy","one-pan","seared"],"ingredients":["salmon","salt","black pepper","1/2 white onion","1 cup mushrooms","1-2 garlic cloves","1/2 cup grape tomatoes","spinach","3/4 cup dry orzo","1 1/2 cups chicken broth","1 Tbsp butter","1-2 Tbsp heavy cream","1/4-1/3 cup grated parmesan","1 Tbsp olive oil"],"steps":["Pat salmon dry. Season both sides with salt and black pepper. Let sit at room temperature.","Dice 1/2 white onion. Slice 1 cup mushrooms. Mince 1-2 garlic cloves.","Measure 1/2 cup grape tomatoes (leave whole). Roughly chop spinach if needed.","Measure: 3/4 cup dry orzo, 1 1/2 cups chicken broth, 1 Tbsp butter, 1-2 Tbsp heavy cream, and 1/4-1/3 cup grated parmesan.","Heat skillet over medium-high. Add 1 Tbsp olive oil. Place salmon skin-side down and press gently for 10 seconds. Cook 4-5 minutes. Flip and cook 1-2 minutes more. Remove at 115-120°F internal temperature. Do not wipe pan.","Reduce heat to medium. Add butter and onion. Cook 3-4 minutes until soft. Add mushrooms and a pinch of salt. Cook 5-6 minutes until lightly browned. Add garlic for last 30 seconds.","Add dry orzo, chicken broth, and tomatoes. Bring to gentle boil. Reduce to low, cover, and simmer 10-12 minutes, stirring occasionally, until tender and liquid mostly absorbed.","Stir in heavy cream, parmesan, and spinach. Cook 1-2 minutes until spinach wilts. Adjust salt and pepper.","Spoon orzo into bowls. Place salmon skin-side up on top. Let rest 1 minute before serving."],"status":"published","published_at":"2026-03-02T22:26:15.996Z","created_date":"2026-03-02T22:26:16.104000"},{"id":"69a5142563451c3e38bce46c","title":"Turkey Meatball Bowl (1 lb Version)","slug":"turkey-meatball-bowl-1-lb-version","description":"This recipe guides you through making a satisfying turkey meatball bowl, complete with roasted sweet potatoes, green beans, and a tangy lemon-Dijon yogurt sauce, utilizing both an oven and an air fryer for efficiency.","meal_type":"dinner","difficulty":"easy","servings":"Not specified","total_time_minutes":30,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["turkey","meatballs","bowl","sweet potato","green beans","air fryer","roasted","lemon-dijon","yogurt sauce"],"ingredients":["1 lb ground turkey","1/2 cup panko breadcrumbs","1 egg","1/4 cup grated parmesan","1/2-3/4 tsp salt","1/2 tsp black pepper","1/2 tsp garlic powder","1 tsp Italian seasoning","1 tsp lemon juice (for meatballs)","1-2 sweet potatoes, cubed","1-2 Tbsp olive oil (for sweet potatoes)","Salt + pepper (for sweet potatoes)","1 lb green beans, trimmed","Olive oil (for green beans)","Salt + pepper (for green beans)","1/4 cup Greek yogurt","1 tsp Dijon mustard","1 Tbsp lemon juice (for sauce)","1/2 Tbsp olive oil (for sauce)","Salt + pepper (for sauce)"],"steps":["For the meatballs, gently mix together the ground turkey, panko breadcrumbs, egg, grated parmesan, salt, black pepper, garlic powder, Italian seasoning, and 1 tsp lemon juice.","Form the mixture into 1 1/2-inch balls (you should get about 14-16 meatballs).","Prepare the sweet potatoes by cubing 1-2 sweet potatoes and tossing them with 1-2 Tbsp olive oil, salt, and pepper.","Prepare the green beans by trimming 1 lb green beans and tossing them with olive oil, salt, and pepper.","At the start (Minute 0), place the seasoned sweet potatoes in an oven preheated to 425°F to roast for 28-30 minutes total.","At Minute 10, add the seasoned green beans to the oven alongside the sweet potatoes and roast for 18-20 minutes.","At Minute 12, start cooking the meatballs in an air fryer at 400°F for 10-12 minutes, flipping them halfway through. Ensure their internal temperature reaches 160-165°F.","While everything is cooking, prepare the Lemon-Dijon Yogurt Sauce: whisk together 1/4 cup Greek yogurt, 1 tsp Dijon mustard, 1 Tbsp lemon juice, 1/2 Tbsp olive oil, salt, and pepper until smooth.","If needed for drizzling consistency, add a splash of water to the sauce.","All components should be cooked and ready to serve between Minute 28 and 30."],"status":"published","published_at":"2026-03-02T04:37:57.598Z","created_date":"2026-03-02T04:37:57.699000"},{"id":"69a5051131aa0c351aca1e05","title":"Lemon-Dijon Chicken Sausage, Broccoli & Tomato Skillet","slug":"lemon-dijon-chicken-sausage-broccoli-tomato-skillet","description":"A flavorful and easy one-pan meal featuring lemon-Dijon chicken sausage, tender-crisp broccoli, and sweet cherry tomatoes, all simmered in a savory broth.","meal_type":"dinner","difficulty":"easy","servings":"Serves 4","total_time_minutes":35,"prep_time_minutes":15,"cook_time_minutes":20,"tags":["chicken sausage","broccoli","tomato","skillet","lemon","dijon","one-pan","weeknight"],"ingredients":["3-4 chicken sausage links","1 large head broccoli","1 cup cherry tomatoes","3/4 cup chicken broth","1 1/2 tsp Dijon mustard","1-2 Tbsp bottled lemon juice","1/2 tsp garlic powder","1/4-1/2 tsp red chili flakes","1 Tbsp olive oil","pinch of salt"],"steps":["Slice 3-4 chicken sausage links into coins.","Cut 1 large head broccoli into medium florets.","Halve 1 cup cherry tomatoes.","In a small bowl, whisk together 3/4 cup chicken broth, 1 1/2 tsp Dijon mustard, 1-2 Tbsp bottled lemon juice, 1/2 tsp garlic powder, and 1/4-1/2 tsp red chili flakes.","Heat 1 Tbsp olive oil in a large skillet over medium-high.","Add sausage and cook 3–4 minutes per side until browned. Remove from pan.","In the same pan, add broccoli with a pinch of salt. Cook 5-7 minutes until tender-crisp.","Pour in the broth mixture and bring to a simmer.","Cook 3-4 minutes to reduce slightly.","Add cherry tomatoes and return sausage to the pan.","Simmer 3-5 minutes until tomatoes soften and everything is heated through."],"status":"published","published_at":"2026-03-02T03:33:37.382Z","created_date":"2026-03-02T03:33:37.560000"},{"id":"69a5042de363d290ee88ad92","title":"Savory Mushroom Orzo with Wine & Herb Chicken","slug":"savory-mushroom-orzo-with-wine-herb-chicken","description":"A delicious recipe for savory mushroom orzo served with chicken marinated in wine and herbs. The chicken is marinated for at least 4 hours, then seared and added to a flavorful mushroom and orzo dish.","meal_type":"dinner","difficulty":"medium","servings":"Serves 3-4","total_time_minutes":64,"prep_time_minutes":20,"cook_time_minutes":44,"tags":["chicken","orzo","mushroom","wine","herb","savory"],"ingredients":["3-4 boneless skinless chicken thighs","1 1/2 Tbsp olive oil (for marinade)","1 Tbsp garlic soy sauce","1 tsp Worcestershire sauce","1/2 tsp Italian seasoning","1/2 tsp black pepper","Small squeeze lemon juice","1/2 white onion","1-1 1/2 cups mushrooms","1-2 cloves garlic (for orzo)","2 Tbsp fresh parsley","3/4 cup dry orzo","1 1/2 cups chicken broth","1/3 cup dry white wine","1/4 cup parmesan","1-2 handfuls spinach","Small drizzle olive oil (for cooking)","Pinch salt"],"steps":["Marinate chicken at least 4 hours (overnight is excellent).","Remove chicken from fridge 30-40 minutes before cooking.","Dice 1/2 white onion.","Slice 1-1 1/2 cups mushrooms.","Mince 1-2 cloves garlic (for orzo).","Chop 2 Tbsp fresh parsley.","Measure 3/4 cup dry orzo.","Measure 1 1/2 cups chicken broth.","Measure 1/3 cup dry white wine.","Grate 1/4 cup parmesan.","Have 1-2 handfuls spinach ready.","Heat skillet over medium for 2-3 minutes; test with water droplets — they should bead and glide. Add small drizzle olive oil.","Cook chicken at medium heat 6-7 minutes per side until deeply golden and 165°F internal. Remove and rest. Do not wipe pan.","Lower heat slightly. Add onion and cook 4-5 minutes.","Add mushrooms with pinch salt. Cook 7-8 minutes until browned.","Add minced garlic for final 30 seconds.","Add 1/3 cup white wine. Scrape pan and reduce 3-4 minutes until nearly evaporated.","Add dry orzo and stir 1-2 minutes.","Add chicken broth. Bring to gentle simmer, cover, and cook 9-10 minutes until tender and liquid mostly absorbed.","Stir in parmesan, spinach (wilt 1-2 minutes), parsley, and black pepper. Add splash broth if needed.","Slice chicken and serve on top."],"status":"published","published_at":"2026-03-02T03:29:48.966Z","created_date":"2026-03-02T03:29:49.085000"}];
+// ── ADMIN CONFIG ────────────────────────────────────────────────────────────
+// To find your UID: sign in, open browser console, type: firebase.auth().currentUser.uid
+// Then replace the string below with your UID
+const ADMIN_UID = 'Ilqx5bsdUMdLQg9hPfDGIrZ7NXB3';
+
+// ── CONSTANTS ───────────────────────────────────────────────────────────────
+const RECIPES_KEY = 'cookbook_recipes_v2';
+const API_KEY_STORE = 'cookbook_api_key';
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let recipes = [];
@@ -289,28 +318,155 @@ let favs = new Set();
 let showFavsOnly = false;
 let currentDetail = null;
 let draftRecipe = null;
+let currentUser = null;
+let isAdmin = false;
+let authMenuOpen = false;
 
-function initData() {
-  const stored = localStorage.getItem(RECIPES_KEY);
-  recipes = stored ? JSON.parse(stored) : [...SEED];
-  if (!stored) saveRecipes();
-  const favStored = localStorage.getItem(FAVS_KEY);
-  favs = new Set(favStored ? JSON.parse(favStored) : []);
-  const key = localStorage.getItem(API_KEY_STORE);
-  if (key) {
-    document.getElementById('api-key-input').value = key;
-    updateApiStatus(true);
+// ── SEED DATA ───────────────────────────────────────────────────────────────
+const SEED = [{"id":"69c6b967b85bcac1cc9d5c6f","title":"Baked Chicken Parmesan with Spaghetti","slug":"baked-chicken-parmesan-with-spaghetti","description":"A quick and easy recipe for baked chicken parmesan served with spaghetti, perfect for a single serving meal.","meal_type":"dinner","difficulty":"easy","servings":"1 serving","total_time_minutes":40,"prep_time_minutes":25,"cook_time_minutes":31,"tags":["chicken","parmesan","spaghetti","baked","italian"],"ingredients":["1 chicken breast, halved","Salt","Black pepper","1 whole egg","1/2 cup panko breadcrumbs","2 Tbsp grated parmesan","1/2 tsp garlic powder","1/2 tsp Italian seasoning","1/2 cup marinara sauce","1/3 cup shredded mozzarella","Olive oil (for drizzling or spraying)","2 oz thin spaghetti","Salt (for water)"],"steps":["Preheat oven to 425°F. Line a baking sheet with parchment paper or lightly grease.","Pat chicken dry and season with salt and pepper.","In one bowl, beat the egg. In another, combine panko, parmesan, garlic powder, and Italian seasoning.","Dip chicken into egg, then coat thoroughly in breadcrumb mixture. Place on baking sheet. Lightly drizzle or spray with olive oil.","Bake for 15 minutes.","Remove from oven, spoon marinara over each piece, and top with mozzarella.","Return to oven and bake another 5-7 minutes until cheese is melted and chicken reaches 165°F.","While chicken bakes, bring a pot of salted water to a boil. Cook spaghetti according to package instructions (about 7-9 minutes). Drain.","Plate spaghetti, top with chicken parmesan, and spoon extra sauce over if desired."],"status":"published","published_at":"2026-03-27T17:07:50.952Z","created_date":"2026-03-27T17:07:51.059000"},{"id":"69c58dce91371f12e5fea7e4","title":"Honey Glazed Carrots with Lemon Garlic Chicken","slug":"honey-glazed-carrots-with-lemon-garlic-chicken","description":"This recipe features tender honey-glazed carrots roasted to perfection alongside pan-seared lemon-garlic chicken breasts. A simple pan sauce is made from the chicken drippings to tie the dish together.","meal_type":"dinner","difficulty":"medium","servings":"2 servings","total_time_minutes":35,"prep_time_minutes":20,"cook_time_minutes":30,"tags":["chicken","carrots","honey glazed","lemon garlic","pan-seared","roasted"],"ingredients":["1 lb baby carrots","1 Tbsp olive oil","1 1/2 Tbsp honey","1 Tbsp butter","Salt","Black pepper","2 chicken breasts (halved horizontally)","Salt","Black pepper","1/2 tsp garlic powder","1/2 tsp paprika","Pinch chili flakes","1 Tbsp olive oil","2-3 Tbsp chicken broth","1-2 Tbsp lemon juice","1 Tbsp butter"],"steps":["Preheat oven to 425°F. Toss carrots with olive oil, honey, butter, salt, and pepper.","Spread the seasoned carrots on a sheet pan in a single layer.","Roast carrots for 25-30 minutes, stirring once halfway through, until tender and caramelized.","Pat chicken dry and season both sides with salt, pepper, garlic powder, paprika, and chili flakes.","When carrots have about 15 minutes left in their roasting time, heat a skillet over medium to medium-high heat and add olive oil.","Cook chicken 4-5 minutes on the first side without moving, then flip and cook for another 3-5 minutes until the internal temperature reaches 160-165°F.","Remove the chicken from the pan and let it rest.","In the same pan, add chicken broth and lemon juice, scrape up any browned bits from the bottom, and simmer for 1 minute.","Add butter to the pan sauce and swirl until it becomes glossy.","Slice chicken if desired, then plate it with the roasted carrots and spoon the pan sauce over the chicken."],"status":"published","published_at":"2026-03-26T19:49:34.625Z","created_date":"2026-03-26T19:49:34.758000"},{"id":"69bb16fcc025ceac2541623e","title":"Lemon and Garlic Chicken with Cherry Tomatoes","slug":"lemon-and-garlic-chicken-with-cherry-tomatoes","description":"This recipe features tender chicken breasts marinated in a zesty lemon-garlic mixture, then seared and finished with sweet cherry tomatoes. It's a quick and flavorful dish perfect for a weeknight meal.","meal_type":"dinner","difficulty":"easy","servings":"4 servings","total_time_minutes":75,"prep_time_minutes":10,"cook_time_minutes":11,"tags":["chicken","lemon","garlic","cherry tomatoes","skillet","marinade"],"ingredients":["2 Tbsp olive oil","3 Tbsp lemon juice","2 garlic cloves, minced","1 tsp rosemary","Salt","Black pepper","2 boneless skinless chicken breasts","2 Tbsp flour","Salt","Black pepper","2 Tbsp canola oil","1/4 cup chicken stock","3/4 lb cherry tomatoes","Pinch white sugar","Salt","1 Tbsp parsley","Parmesan"],"steps":["Stir olive oil, lemon juice, garlic, rosemary, salt, and pepper in a bowl.","Cut each chicken breast into 2 equal pieces. Add to marinade, cover, and refrigerate for 30 minutes.","Remove chicken, pat dry, and pound to about 1/4 inch thickness.","Season lightly with salt and pepper, then dredge in flour, shaking off excess.","Preheat oven to low (to keep chicken warm).","Heat skillet over high heat. Add canola oil.","Cook chicken about 90 seconds per side until browned. Transfer to sheet pan and keep warm in oven.","Reduce heat to medium-high. Deglaze pan with chicken stock, scraping browned bits.","Add cherry tomatoes and cook about 8 minutes, stirring frequently, until softened.","Add a pinch of sugar and salt to taste.","Remove chicken from oven. Top with tomato mixture.","Garnish with parsley and parmesan and serve."],"status":"published","published_at":"2026-03-18T21:19:55.732Z","created_date":"2026-03-18T21:19:56.056000"},{"id":"69bb15dca55b7e636c89355a","title":"Baked Hot Honey Chicken","slug":"baked-hot-honey-chicken","description":"This recipe features tender boneless, skinless chicken baked to golden perfection and then drizzled with a sweet and spicy hot honey sauce.","meal_type":"dinner","difficulty":"easy","servings":"2–4 servings","total_time_minutes":35,"prep_time_minutes":15,"cook_time_minutes":22,"tags":["chicken","hot honey","baked","spicy","easy"],"ingredients":["1 lb boneless, skinless chicken (breast or thighs)","Salt","Black pepper","Garlic powder","Paprika","1-2 eggs","1 cup breadcrumbs or panko","1/4-1/3 cup honey","1-2 Tbsp hot sauce","1 Tbsp butter (optional)","Pinch chili flakes or cayenne (optional)"],"steps":["Preheat oven to 400–425°F. Line a baking sheet with parchment paper or lightly grease.","Season chicken with salt, pepper, garlic powder, and paprika.","Prepare two bowls: one with beaten eggs and one with breadcrumbs.","Dip chicken into egg, then coat fully in breadcrumbs. Place on baking sheet.","Bake for 18-22 minutes, until chicken reaches 165°F and coating is golden.","While chicken bakes, combine honey, hot sauce, butter, and chili flakes in a small pan. Warm over low heat until smooth.","Remove chicken from oven and drizzle with hot honey sauce. Serve immediately."],"status":"published","published_at":"2026-03-18T21:15:08.677Z","created_date":"2026-03-18T21:15:08.827000"},{"id":"69bb1545fb3cac9d0999d3c2","title":"Honey Lemon Soy Chicken","slug":"honey-lemon-soy-chicken","description":"This recipe features tender boneless, skinless chicken thighs marinated in a honey lemon soy sauce, air-fried to perfection, and served alongside roasted broccoli.","meal_type":"dinner","difficulty":"easy","servings":"2-3 servings","total_time_minutes":45,"prep_time_minutes":25,"cook_time_minutes":20,"tags":["chicken","honey","lemon","soy","broccoli","air fryer","roasted"],"ingredients":["1/4 cup honey","2 Tbsp lemon juice","2 Tbsp Dale's Reduced Sodium Marinade (Gluten Free)","Salt and pepper to taste","Boneless, skinless chicken thighs","Medium broccoli florets","Olive oil","Salt","Black pepper","Garlic powder","Chili flakes","Splash of lemon juice"],"steps":["Whisk honey, lemon juice, Dale's marinade, salt, and pepper until smooth. Marinate chicken for at least 30 minutes. Reserve a portion before adding raw chicken if using as a glaze. Simmer reserved marinade 3-5 minutes until slightly thickened.","Preheat air fryer to 400°F. Place marinated chicken thighs in air fryer and cook 16 minutes, flipping halfway if desired, until internal temperature reaches 175°F. Brush with glaze during last few minutes or immediately after cooking.","Preheat oven to 425°F. Toss broccoli with olive oil, salt, pepper, garlic powder, and chili flakes. Spread onto baking sheet and press down firmly using a mixing bowl to maximize contact with the pan. Roast for 20 minutes until browned. Finish with a splash of lemon juice before serving."],"status":"published","published_at":"2026-03-18T21:12:36.930Z","created_date":"2026-03-18T21:12:37.084000"},{"id":"69a61051f1aad28b89542f82","title":"Salmon and Sweet Potato","slug":"salmon-and-sweet-potato","description":"This recipe features salmon fillets and sweet potatoes, seasoned and baked, with a mustard and brown sugar glaze for the salmon.","meal_type":"dinner","difficulty":"easy","servings":"2","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["dinner","salmon","sweet potato"],"ingredients":["2 salmon fillets","2 medium sweet potatoes","2 tbsp olive oil","salt","black pepper","1 tsp dried rosemary","1/2 tsp onion powder","1/2 tsp garlic powder","1 tbsp dijon mustard","1.5 tbsp brown sugar"],"steps":["Preheat oven to 400 degrees Fahrenheit.","Dice sweet potatoes into 1-inch cubes.","Toss sweet potatoes with 1 tbsp olive oil, salt, pepper, garlic power, and onion powder.","Bake for 15 minutes until they begin to soften.","Combine mustard and brown sugar.","Drizzle salmon with olive oil and season with salt and pepper.","Brush brown sugar mix onto salmon.","Remove potatoes and move to side of sheet.","Place salmon fillets on.","Cook for another 10-15 minutes (flakes easily with fork)."],"status":"published","published_at":"2026-03-02T22:33:53.230Z","created_date":"2026-03-02T22:33:53.373000"},{"id":"69a6102d516898c59dd7dd55","title":"Chicken with Mushroom Pan Sauce","slug":"chicken-with-mushroom-pan-sauce","description":"A flavorful chicken dish featuring skin-on chicken thighs seared to perfection and finished with a rich mushroom pan sauce.","meal_type":"dinner","difficulty":"medium","servings":"6 servings","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["chicken","mushroom","pan sauce","dinner"],"ingredients":["6 skin on chicken thighs","2 packs mushrooms","2 garlic cloves, minced","1 shallot, minced","1 1/2 cups chicken stock","1/2 cup heavy cream","1 1/2 tbsp olive oil","salt","black pepper","butter","thyme","lemon juice"],"steps":["Preheat oven to 375 degrees Fahrenheit.","Remove chicken from fridge, pat dry, season lightly with salt and pepper, and rest for 15 minutes.","Heat large skillet over medium-high heat.","Add oil and sear chicken until skin browned (5-6 minutes).","Flip and sear other side, then remove thighs and set aside.","Melt butter in skillet and saute mushrooms for 5-6 minutes, adding in garlic and shallots towards the end.","Add thyme, salt, and pepper and continue to saute for 1 minute.","Deglaze with chicken stock, scraping up all bits.","Reduce heat to simmer until stock has halved, add salt and pepper.","Nestle chicken thighs skin side up in pan, cover with mushroom sauce, and cook in oven for 15 minutes.","Remove from heat and remove chicken from skillet.","Add heavy cream and lemon juice to taste, and adjust stock/seasonings as needed.","Pour sauce back over chicken and serve."],"status":"published","published_at":"2026-03-02T22:33:17.230Z","created_date":"2026-03-02T22:33:17.325000"},{"id":"69a610173a72bba892c310f7","title":"Banana Protein Pancakes","slug":"banana-protein-pancakes","description":"A simple recipe for protein-packed banana pancakes, perfect for a healthy breakfast option.","meal_type":"breakfast","difficulty":"easy","servings":"Makes 10 pancakes","total_time_minutes":20,"prep_time_minutes":20,"cook_time_minutes":20,"tags":["banana","protein","pancakes","breakfast"],"ingredients":["3 large bananas","3 large eggs","1 scoop peanut butter","1/2 scoop vanilla protein powder","1/2 cup oats","honey","cinnamon"],"steps":["Pre-heat large pan on medium heat and spray with nonstick cooking spray.","Mash bananas with a fork.","Combine all ingredients in blender. Then, blend to desired consistency.","Pour batter into pan for small-medium pancakes.","Flip when bubbling and golden brown."],"status":"published","published_at":"2026-03-02T22:32:55.019Z","created_date":"2026-03-02T22:32:55.138000"},{"id":"69a60fff36c77fc9419bad52","title":"Banana Bread Muffins (with Chocolate Chips)","slug":"banana-bread-muffins-with-chocolate-chips","description":"A delicious recipe for banana bread muffins featuring chocolate chips, perfect for breakfast or a snack.","meal_type":"snack","difficulty":"easy","servings":"Makes 24 muffins","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":20,"tags":["banana","muffin","chocolate chips","baking"],"ingredients":["3 large ripe bananas","2 cups all-purpose flour","3/4 cup brown sugar","1 teaspoon baking soda","1/2 teaspoon salt","1/2 teaspoon vanilla extract","1 stick butter, melted","2 large eggs","semi-sweet chocolate chips (minimum 1/3 cup)"],"steps":["Heat oven to 350 degrees F. Spray muffin tin with nonstick cooking spray.","Mash bananas until almost smooth in a medium mixing bowl with a fork. Set aside.","Whisk together flour, brown sugar, baking soda, and salt in a large mixing bowl.","Melt butter.","Combine melted butter, eggs, vanilla extract, and mashed bananas with dry ingredient. Stir until a batter forms.","Add chocolate chips.","Spread batter evenly into greased muffin tray.","Bake until a toothpick inserted into the middle of the loaf comes out clean, about 20 minutes.","Cool muffins in tray for 10 minutes. Remove from tray and allow to cool completely on a wire rack."],"status":"published","published_at":"2026-03-02T22:32:31.512Z","created_date":"2026-03-02T22:32:31.602000"},{"id":"69a60fd7254e363bd957d440","title":"My Best Pumpkin Bread","slug":"my-best-pumpkin-bread","description":"Homemade pumpkin bread packed with sweet cinnamon spice, tons of pumpkin flavor, and optional chocolate chips.","meal_type":"dessert","difficulty":"easy","servings":"1 loaf","total_time_minutes":75,"prep_time_minutes":15,"cook_time_minutes":60,"tags":["pumpkin","bread","chocolate chips","fall","baked goods"],"ingredients":["1 and 3/4 cups all-purpose flour","1 teaspoon baking soda","2 teaspoons ground cinnamon","1/4 teaspoon ground nutmeg","1/4 teaspoon ground cloves","1/4 teaspoon ground ginger","3/4 teaspoon salt","2 large eggs","1/2 cup granulated sugar","3/4 cup packed brown sugar","1 and 1/2 cups pumpkin puree","1/2 cup vegetable oil","1/4 cup orange juice","2/3 cup semi-sweet chocolate chips"],"steps":["Preheat oven to 350°F. Grease a 9x5-inch loaf pan.","Whisk flour, baking soda, cinnamon, nutmeg, cloves, ginger, and salt. In another bowl, whisk eggs, sugars, pumpkin, oil, and OJ. Combine wet and dry, fold in chocolate chips.","Bake 60-65 minutes, covering loosely with foil halfway. Done when toothpick comes out clean.","Cool completely before slicing.","Store at room temp up to 4 days or refrigerate up to a week."],"status":"published","published_at":"2026-03-02T22:31:51.763Z","created_date":"2026-03-02T22:31:51.870000"},{"id":"69a60fa4858dcec8d0a69886","title":"Roasted Brussels Sprouts with Balsamic Vinegar & Honey","slug":"roasted-brussels-sprouts-with-balsamic-vinegar-honey","description":"Simple roasted Brussels sprouts elevated with balsamic vinegar and honey.","meal_type":"other","difficulty":"easy","servings":"6 servings","total_time_minutes":30,"prep_time_minutes":10,"cook_time_minutes":20,"tags":["brussels sprouts","roasted","balsamic vinegar","honey","vegetable","side dish"],"ingredients":["1½ pounds Brussels sprouts, halved","3 tablespoons extra virgin olive oil","½ teaspoon kosher salt","½ teaspoon black pepper","1 tablespoon balsamic vinegar","1 teaspoon honey"],"steps":["Preheat oven to 425°F. Line a baking sheet with foil.","Toss Brussels sprouts with 2 Tbsp oil, salt, and pepper on the sheet. Roast 20 minutes, stirring halfway.","Drizzle with remaining oil, balsamic vinegar, and honey. Toss and serve.","Cut large sprouts into quarters for even cooking."],"status":"published","published_at":"2026-03-02T22:31:00.215Z","created_date":"2026-03-02T22:31:00.354000"},{"id":"69a60f71294bacaf431dffc3","title":"Savory Lemon Orzo with Caramelized Onion","slug":"savory-lemon-orzo-with-caramelized-onion","description":"Savory orzo with sweet caramelized onions and bright lemon, designed to pair with salmon.","meal_type":"other","difficulty":"easy","servings":"Serves 2-4","total_time_minutes":21,"prep_time_minutes":5,"cook_time_minutes":16,"tags":["lemon","orzo","caramelized onion","side dish","quick"],"ingredients":["1 cup orzo","1/2-1 white onion, thinly sliced","1-2 Tbsp olive oil","Salt","Black pepper","1-2 Tbsp lemon juice","Optional: tiny splash soy sauce"],"steps":["Heat olive oil in a skillet over medium. Add onion and salt. Cook 10-12 minutes until golden.","Boil salted water, cook orzo 8-10 minutes until al dente. Drain.","Add orzo to onions. Stir in lemon juice, pepper, and optional soy sauce. Toss 1-2 minutes. Adjust salt.","Serve immediately."],"status":"published","published_at":"2026-03-02T22:30:09.565Z","created_date":"2026-03-02T22:30:09.766000"},{"id":"69a60e88b4a49f5a3cdf893c","title":"Creamy Mushroom Tomato Orzo with Crispy Skin Salmon","slug":"creamy-mushroom-tomato-orzo-with-crispy-skin-salmon","description":"Pan-seared salmon with crispy skin served over creamy orzo with mushrooms, tomatoes, and spinach.","meal_type":"dinner","difficulty":"medium","servings":"Serves 2-4","total_time_minutes":45,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["salmon","orzo","mushrooms","tomato","creamy","one-pan","seared"],"ingredients":["salmon fillets","salt","black pepper","1/2 white onion","1 cup mushrooms","1-2 garlic cloves","1/2 cup grape tomatoes","spinach","3/4 cup dry orzo","1 1/2 cups chicken broth","1 Tbsp butter","1-2 Tbsp heavy cream","1/4-1/3 cup grated parmesan","1 Tbsp olive oil"],"steps":["Pat salmon dry, season with salt and pepper. Let sit at room temp.","Dice onion, slice mushrooms, mince garlic. Measure remaining ingredients.","Heat skillet medium-high. Add oil. Cook salmon skin-side down 4-5 min, flip 1-2 min. Remove at 115-120°F. Don't wipe pan.","Add butter and onion. Cook 3-4 min. Add mushrooms and salt, cook 5-6 min. Add garlic 30 seconds.","Add orzo, broth, tomatoes. Simmer covered 10-12 min until tender.","Stir in cream, parmesan, spinach. Cook 1-2 min. Adjust seasoning.","Plate orzo, top with salmon skin-side up."],"status":"published","published_at":"2026-03-02T22:26:15.996Z","created_date":"2026-03-02T22:26:16.104000"},{"id":"69a5142563451c3e38bce46c","title":"Turkey Meatball Bowl (1 lb Version)","slug":"turkey-meatball-bowl-1-lb-version","description":"Turkey meatball bowl with roasted sweet potatoes, green beans, and lemon-Dijon yogurt sauce.","meal_type":"dinner","difficulty":"easy","servings":"Not specified","total_time_minutes":30,"prep_time_minutes":15,"cook_time_minutes":30,"tags":["turkey","meatballs","bowl","sweet potato","green beans","air fryer","roasted"],"ingredients":["1 lb ground turkey","1/2 cup panko breadcrumbs","1 egg","1/4 cup grated parmesan","1/2-3/4 tsp salt","1/2 tsp black pepper","1/2 tsp garlic powder","1 tsp Italian seasoning","1 tsp lemon juice","1-2 sweet potatoes, cubed","olive oil","salt + pepper","1 lb green beans, trimmed","1/4 cup Greek yogurt","1 tsp Dijon mustard","1 Tbsp lemon juice (sauce)","1/2 Tbsp olive oil (sauce)"],"steps":["Mix turkey, panko, egg, parmesan, salt, pepper, garlic powder, Italian seasoning, and lemon juice. Form into 1½-inch balls.","Toss sweet potatoes with olive oil, salt, pepper. Roast at 425°F for 28-30 min total.","At minute 10: add green beans (tossed with oil, salt, pepper) to oven for 18-20 min.","At minute 12: air fry meatballs at 400°F for 10-12 min, flipping halfway. Internal temp 160-165°F.","Whisk yogurt, Dijon, lemon juice, olive oil, salt, pepper for sauce. Add water to thin if needed.","Serve everything together between minute 28-30."],"status":"published","published_at":"2026-03-02T04:37:57.598Z","created_date":"2026-03-02T04:37:57.699000"},{"id":"69a5051131aa0c351aca1e05","title":"Lemon-Dijon Chicken Sausage, Broccoli & Tomato Skillet","slug":"lemon-dijon-chicken-sausage-broccoli-tomato-skillet","description":"Easy one-pan meal with lemon-Dijon chicken sausage, tender-crisp broccoli, and cherry tomatoes.","meal_type":"dinner","difficulty":"easy","servings":"Serves 4","total_time_minutes":35,"prep_time_minutes":15,"cook_time_minutes":20,"tags":["chicken sausage","broccoli","tomato","skillet","lemon","dijon","one-pan","weeknight"],"ingredients":["3-4 chicken sausage links","1 large head broccoli","1 cup cherry tomatoes","3/4 cup chicken broth","1 1/2 tsp Dijon mustard","1-2 Tbsp lemon juice","1/2 tsp garlic powder","1/4-1/2 tsp red chili flakes","1 Tbsp olive oil","pinch of salt"],"steps":["Slice sausage into coins. Cut broccoli into florets. Halve tomatoes.","Whisk broth, Dijon, lemon juice, garlic powder, chili flakes.","Heat oil in large skillet medium-high. Cook sausage 3-4 min per side. Remove.","Add broccoli and salt. Cook 5-7 min.","Add broth mixture, simmer 3-4 min.","Add tomatoes and sausage. Simmer 3-5 min until tomatoes soften."],"status":"published","published_at":"2026-03-02T03:33:37.382Z","created_date":"2026-03-02T03:33:37.560000"},{"id":"69a5042de363d290ee88ad92","title":"Savory Mushroom Orzo with Wine & Herb Chicken","slug":"savory-mushroom-orzo-with-wine-herb-chicken","description":"Savory mushroom orzo with chicken marinated in wine and herbs, seared and served on top.","meal_type":"dinner","difficulty":"medium","servings":"Serves 3-4","total_time_minutes":64,"prep_time_minutes":20,"cook_time_minutes":44,"tags":["chicken","orzo","mushroom","wine","herb","savory"],"ingredients":["3-4 boneless skinless chicken thighs","1 1/2 Tbsp olive oil (marinade)","1 Tbsp garlic soy sauce","1 tsp Worcestershire sauce","1/2 tsp Italian seasoning","1/2 tsp black pepper","Small squeeze lemon juice","1/2 white onion","1-1 1/2 cups mushrooms","1-2 cloves garlic","2 Tbsp fresh parsley","3/4 cup dry orzo","1 1/2 cups chicken broth","1/3 cup dry white wine","1/4 cup parmesan","1-2 handfuls spinach"],"steps":["Marinate chicken at least 4 hours (overnight is best). Remove from fridge 30-40 min before cooking.","Dice onion, slice mushrooms, mince garlic, chop parsley. Measure remaining ingredients.","Heat skillet medium. Cook chicken 6-7 min per side until 165°F. Remove and rest. Don't wipe pan.","Add onion, cook 4-5 min. Add mushrooms and salt, cook 7-8 min. Add garlic 30 seconds.","Add wine, scrape pan, reduce 3-4 min. Add orzo, stir 1-2 min. Add broth, simmer covered 9-10 min.","Stir in parmesan, spinach, parsley, pepper. Slice chicken and serve on top."],"status":"published","published_at":"2026-03-02T03:29:48.966Z","created_date":"2026-03-02T03:29:49.085000"}];
+
+// ── DATA (FIRESTORE) ────────────────────────────────────────────────────────
+async function initData() {
+  // Show loading state
+  document.getElementById('recipe-grid').innerHTML = '<div class="no-results" style="grid-column:1/-1"><p style="color:var(--text3);">Loading recipes...</p></div>';
+
+  try {
+    // Check if Firestore has recipes, if not seed it
+    const snapshot = await db.collection('recipes').limit(1).get();
+    if (snapshot.empty) {
+      const batch = db.batch();
+      SEED.forEach(r => { batch.set(db.collection('recipes').doc(r.id), r); });
+      await batch.commit();
+    }
+
+    // Set up real-time listener
+    db.collection('recipes').where('status', '==', 'published')
+      .onSnapshot(snap => {
+        recipes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        applyFilters();
+      }, err => {
+        console.error('Firestore listener error:', err);
+        // Fall back to seed data so the page still works
+        recipes = [...SEED];
+        applyFilters();
+      });
+  } catch(e) {
+    console.error('Firestore init error:', e);
+    recipes = [...SEED];
+    applyFilters();
   }
 }
-function saveRecipes() { localStorage.setItem(RECIPES_KEY, JSON.stringify(recipes)); }
-function saveFavs() { localStorage.setItem(FAVS_KEY, JSON.stringify([...favs])); }
+
+async function saveRecipeToFirestore(r) {
+  await db.collection('recipes').doc(r.id).set(r);
+}
+
+async function updateRecipeInFirestore(id, data) {
+  await db.collection('recipes').doc(id).update(data);
+}
+
+async function deleteRecipeFromFirestore(id) {
+  await db.collection('recipes').doc(id).delete();
+}
+
+// ── AUTH ────────────────────────────────────────────────────────────────────
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  isAdmin = user && user.uid === ADMIN_UID;
+  updateAuthUI();
+  if (user) {
+    await loadFavsFromFirestore();
+  } else {
+    favs = new Set();
+  }
+  applyFilters();
+  if (currentDetail) renderDetail(currentDetail);
+});
+
+function signIn() {
+  auth.signInWithPopup(googleProvider).catch(e => showToast('Sign-in failed: ' + e.message));
+}
+
+function signOut() {
+  auth.signOut();
+  favs = new Set();
+  closeAuthMenu();
+  showToast('Signed out');
+}
+
+function updateAuthUI() {
+  const area = document.getElementById('auth-area');
+  const aiBtn = document.getElementById('nav-ai');
+
+  // Show AI Generate tab for any signed-in user
+  aiBtn.style.display = currentUser ? 'inline-block' : 'none';
+
+  if (!currentUser) {
+    area.innerHTML = `<button class="auth-btn" onclick="signIn()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2.5 13.5c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Sign in
+    </button>`;
+    return;
+  }
+
+  const photo = currentUser.photoURL ? `<img src="${currentUser.photoURL}" class="auth-avatar">` : `<div class="auth-avatar" style="background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text2);">${(currentUser.displayName||'U')[0]}</div>`;
+
+  area.innerHTML = `<div style="position:relative;">
+    <button class="auth-btn" onclick="toggleAuthMenu()" id="auth-avatar-btn">
+      ${photo}
+      ${currentUser.displayName ? currentUser.displayName.split(' ')[0] : 'Account'}
+      ${isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
+    </button>
+    <div class="auth-menu" id="auth-menu" style="display:none;">
+      <div class="auth-menu-name">${currentUser.email}</div>
+      ${isAdmin ? '<div class="auth-menu-name" style="color:var(--accent);border-bottom:none;padding-top:4px;">Administrator</div>' : ''}
+      <button class="auth-menu-item" onclick="signOut()">Sign out</button>
+    </div>
+  </div>`;
+}
+
+function toggleAuthMenu() {
+  const menu = document.getElementById('auth-menu');
+  if (!menu) return;
+  authMenuOpen = !authMenuOpen;
+  menu.style.display = authMenuOpen ? 'block' : 'none';
+}
+
+function closeAuthMenu() {
+  authMenuOpen = false;
+  const menu = document.getElementById('auth-menu');
+  if (menu) menu.style.display = 'none';
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#auth-area')) closeAuthMenu();
+});
+
+// ── FIRESTORE FAVORITES ─────────────────────────────────────────────────────
+async function loadFavsFromFirestore() {
+  if (!currentUser) return;
+  try {
+    const doc = await db.collection('favorites').doc(currentUser.uid).get();
+    if (doc.exists) favs = new Set(doc.data().ids || []);
+    else favs = new Set();
+  } catch(e) { favs = new Set(); }
+}
+
+async function saveFavsToFirestore() {
+  if (!currentUser) return;
+  try {
+    await db.collection('favorites').doc(currentUser.uid).set({ ids: [...favs] });
+  } catch(e) { console.error('Failed to save favs', e); }
+}
 
 // ── NAVIGATION ─────────────────────────────────────────────────────────────
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  document.getElementById('nav-' + (name === 'detail' ? 'home' : name)).classList.add('active');
+  const navTarget = name === 'detail' ? 'home' : name;
+  const navEl = document.getElementById('nav-' + navTarget);
+  if (navEl) navEl.classList.add('active');
   window.scrollTo(0, 0);
 }
 
@@ -323,26 +479,25 @@ function applyFilters() {
   const sort = document.getElementById('f-sort').value;
 
   let filtered = recipes.filter(r => r.status === 'published');
-
   if (q) filtered = filtered.filter(r =>
     r.title.toLowerCase().includes(q) ||
-    (r.description || '').toLowerCase().includes(q) ||
-    (r.tags || []).some(t => t.toLowerCase().includes(q)) ||
-    (r.ingredients || []).some(i => i.toLowerCase().includes(q))
+    (r.description||'').toLowerCase().includes(q) ||
+    (r.tags||[]).some(t => t.toLowerCase().includes(q)) ||
+    (r.ingredients||[]).some(i => i.toLowerCase().includes(q))
   );
   if (meal) filtered = filtered.filter(r => r.meal_type === meal);
   if (diff) filtered = filtered.filter(r => r.difficulty === diff);
   if (timeMax) filtered = filtered.filter(r => r.total_time_minutes && r.total_time_minutes <= parseInt(timeMax));
   if (showFavsOnly) filtered = filtered.filter(r => favs.has(r.id));
 
-  const diffOrder = { easy: 0, medium: 1, hard: 2 };
-  if (sort === 'newest') filtered.sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
-  else if (sort === 'fastest') filtered.sort((a, b) => (a.total_time_minutes || 999) - (b.total_time_minutes || 999));
-  else if (sort === 'alpha') filtered.sort((a, b) => a.title.localeCompare(b.title));
-  else if (sort === 'diff') filtered.sort((a, b) => (diffOrder[a.difficulty] || 0) - (diffOrder[b.difficulty] || 0));
+  const diffOrder = { easy:0, medium:1, hard:2 };
+  if (sort === 'newest') filtered.sort((a,b) => new Date(b.created_date) - new Date(a.created_date));
+  else if (sort === 'fastest') filtered.sort((a,b) => (a.total_time_minutes||999) - (b.total_time_minutes||999));
+  else if (sort === 'alpha') filtered.sort((a,b) => a.title.localeCompare(b.title));
+  else if (sort === 'diff') filtered.sort((a,b) => (diffOrder[a.difficulty]||0) - (diffOrder[b.difficulty]||0));
 
   renderGrid(filtered);
-  document.getElementById('recipe-count').textContent = `${filtered.length} recipe${filtered.length !== 1 ? 's' : ''}`;
+  document.getElementById('recipe-count').textContent = `${filtered.length} recipe${filtered.length!==1?'s':''}`;
 }
 
 function renderGrid(list) {
@@ -355,10 +510,11 @@ function renderGrid(list) {
     const isFav = favs.has(r.id);
     const time = r.total_time_minutes ? `${r.total_time_minutes} min` : '';
     const diffClass = r.difficulty === 'hard' ? 'badge-diff hard' : 'badge-diff';
+    const favStar = currentUser ? `<button class="fav-star ${isFav?'active':''}" onclick="event.stopPropagation();toggleFav('${r.id}')" title="Favorite">★</button>` : '';
     return `<div class="recipe-card" onclick="openDetail('${r.id}')">
       <div class="card-top">
         <div class="card-title">${r.title}</div>
-        <button class="fav-star ${isFav ? 'active' : ''}" onclick="event.stopPropagation();toggleFav('${r.id}')" title="Favorite">★</button>
+        ${favStar}
       </div>
       ${r.description ? `<div class="card-desc">${r.description}</div>` : ''}
       <div class="card-meta">
@@ -370,10 +526,11 @@ function renderGrid(list) {
   }).join('');
 }
 
-function toggleFav(id) {
+async function toggleFav(id) {
+  if (!currentUser) { showToast('Sign in to save favorites'); return; }
   if (favs.has(id)) favs.delete(id);
   else favs.add(id);
-  saveFavs();
+  await saveFavsToFirestore();
   applyFilters();
   if (currentDetail === id) renderDetail(id);
 }
@@ -410,34 +567,93 @@ function renderDetail(id) {
   if (r.total_time_minutes) metas.push(`<span class="badge badge-time">${r.total_time_minutes} min total</span>`);
   if (r.prep_time_minutes) metas.push(`<span class="badge badge-meal">Prep: ${r.prep_time_minutes} min</span>`);
   if (r.servings) metas.push(`<span class="badge badge-meal">${r.servings}</span>`);
-  if (r.difficulty) metas.push(`<span class="badge ${r.difficulty === 'hard' ? 'badge-diff hard' : 'badge-diff'}">${r.difficulty}</span>`);
+  if (r.difficulty) metas.push(`<span class="badge ${r.difficulty==='hard'?'badge-diff hard':'badge-diff'}">${r.difficulty}</span>`);
   if (r.meal_type) metas.push(`<span class="badge badge-meal">${r.meal_type}</span>`);
 
+  const favBtn = currentUser
+    ? `<button class="detail-fav ${isFav?'active':''}" onclick="toggleFav('${r.id}')">${isFav?'★ Favorited':'☆ Favorite'}</button>`
+    : `<button class="detail-fav" onclick="showToast('Sign in to save favorites')" style="opacity:0.5">☆ Favorite</button>`;
+
+  const editBtn = currentUser ? `<button class="nav-btn" onclick="renderEditDetail('${r.id}')">Edit</button>` : '';
+
   document.getElementById('detail-content').innerHTML = `
-    <button class="back-btn" onclick="showPage('home')">← Back to recipes</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+      <button class="back-btn" style="margin:0" onclick="showPage('home')">← Back to recipes</button>
+      <div style="display:flex;gap:8px;">${favBtn}${editBtn}</div>
+    </div>
     <div class="detail-header">
       <h1 class="detail-title">${r.title}</h1>
       ${r.description ? `<p class="detail-desc">${r.description}</p>` : ''}
       <div class="detail-meta">${metas.join('')}</div>
-      <button class="detail-fav ${isFav ? 'active' : ''}" onclick="toggleFav('${r.id}')">
-        ${isFav ? '★ Saved to favorites' : '☆ Save to favorites'}
-      </button>
     </div>
     <hr class="detail-divider">
-    ${r.ingredients && r.ingredients.length ? `
+    ${r.ingredients&&r.ingredients.length ? `
       <div class="detail-section-title">Ingredients</div>
-      <ul class="ingredients-list">${r.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
-      <hr class="detail-divider">
-    ` : ''}
-    ${r.steps && r.steps.length ? `
+      <ul class="ingredients-list">${r.ingredients.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>
+      <hr class="detail-divider">` : ''}
+    ${r.steps&&r.steps.length ? `
       <div class="detail-section-title">Instructions</div>
-      <ol class="steps-list">${r.steps.map(s => `<li><span>${s}</span></li>`).join('')}</ol>
-    ` : ''}
-    ${r.tags && r.tags.length ? `
+      <ol class="steps-list">${r.steps.map(s=>`<li><span>${esc(s)}</span></li>`).join('')}</ol>` : ''}
+    ${r.tags&&r.tags.length ? `
       <hr class="detail-divider">
-      <div class="tags-row">${r.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-    ` : ''}
+      <div class="tags-row">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''}
   `;
+}
+
+function renderEditDetail(id) {
+  if (!currentUser) return;
+  const r = recipes.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('detail-content').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+      <button class="back-btn" style="margin:0" onclick="renderDetail('${r.id}')">← Cancel</button>
+      <span style="font-size:13px;color:var(--text3);">Editing recipe</span>
+    </div>
+    <div class="draft-section">
+      <div class="draft-field"><div class="draft-field-label">Title</div><input class="draft-input" id="e-title" value="${esc(r.title)}"></div>
+      <div class="draft-field"><div class="draft-field-label">Description</div><input class="draft-input" id="e-desc" value="${esc(r.description||'')}"></div>
+      <div class="draft-row">
+        <div class="draft-field"><div class="draft-field-label">Meal type</div><select class="draft-input" id="e-meal">${['breakfast','lunch','dinner','snack','dessert','other'].map(m=>`<option value="${m}" ${r.meal_type===m?'selected':''}>${m}</option>`).join('')}</select></div>
+        <div class="draft-field"><div class="draft-field-label">Difficulty</div><select class="draft-input" id="e-diff">${['easy','medium','hard'].map(d=>`<option value="${d}" ${r.difficulty===d?'selected':''}>${d}</option>`).join('')}</select></div>
+        <div class="draft-field"><div class="draft-field-label">Total time (min)</div><input class="draft-input" id="e-time" type="number" value="${r.total_time_minutes||''}"></div>
+        <div class="draft-field"><div class="draft-field-label">Servings</div><input class="draft-input" id="e-servings" value="${esc(r.servings||'')}"></div>
+      </div>
+      <div class="draft-field"><div class="draft-field-label">Ingredients (one per line)</div><textarea class="draft-textarea" id="e-ingredients" rows="10">${(r.ingredients||[]).map(i=>esc(i)).join('\n')}</textarea></div>
+      <div class="draft-field"><div class="draft-field-label">Steps (one per line)</div><textarea class="draft-textarea" id="e-steps" rows="12">${(r.steps||[]).map(s=>esc(s)).join('\n')}</textarea></div>
+      <div class="draft-field"><div class="draft-field-label">Tags (comma separated)</div><input class="draft-input" id="e-tags" value="${(r.tags||[]).join(', ')}"></div>
+      <div class="draft-actions">
+        <button class="publish-btn" onclick="saveEdit('${r.id}')">Save Changes</button>
+        ${isAdmin ? `<button class="discard-btn" onclick="deleteRecipe('${r.id}')">Delete Recipe</button>` : ''}
+      </div>
+    </div>`;
+  window.scrollTo(0,0);
+}
+
+async function saveEdit(id) {
+  if (!currentUser) return;
+  const idx = recipes.findIndex(x => x.id === id);
+  if (idx === -1) return;
+  const updated = { ...recipes[idx],
+    title: document.getElementById('e-title').value.trim(),
+    description: document.getElementById('e-desc').value.trim(),
+    meal_type: document.getElementById('e-meal').value,
+    difficulty: document.getElementById('e-diff').value,
+    total_time_minutes: parseInt(document.getElementById('e-time').value)||null,
+    servings: document.getElementById('e-servings').value.trim(),
+    ingredients: document.getElementById('e-ingredients').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    steps: document.getElementById('e-steps').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    tags: document.getElementById('e-tags').value.split(',').map(s=>s.trim()).filter(Boolean),
+    updated_date: new Date().toISOString(),
+  };
+  await updateRecipeInFirestore(id, updated);
+  renderDetail(id); showToast('Recipe saved'); window.scrollTo(0,0);
+}
+
+async function deleteRecipe(id) {
+  if (!isAdmin) { showToast('Only the admin can delete recipes'); return; }
+  if (!confirm('Delete this recipe? This cannot be undone.')) return;
+  await deleteRecipeFromFirestore(id);
+  showPage('home'); showToast('Recipe deleted');
 }
 
 // ── API KEY ─────────────────────────────────────────────────────────────────
@@ -448,177 +664,170 @@ function saveApiKey() {
   updateApiStatus(true);
   showToast('API key saved');
 }
-
 function updateApiStatus(isSet) {
   const el = document.getElementById('api-status');
   el.className = 'api-status ' + (isSet ? 'set' : 'unset');
   el.textContent = isSet ? '✓ API key saved — ready to generate' : 'No key saved yet';
 }
-
 function getApiKey() { return localStorage.getItem(API_KEY_STORE) || ''; }
 
-// ── AI GENERATE ─────────────────────────────────────────────────────────────
-async function generateRecipe() {
-  const key = getApiKey();
-  if (!key) { showError('Please save your Anthropic API key first.'); return; }
+// ── CHAT ────────────────────────────────────────────────────────────────────
+let chatHistory = [];
+let chatBusy = false;
 
-  const prompt = document.getElementById('prompt-input').value.trim();
-  if (!prompt) { showError('Please describe what you want to make.'); return; }
+const CHAT_SYSTEM = `You are a friendly recipe development assistant helping someone build recipes for their personal cookbook.
 
-  const meal = document.getElementById('gen-meal').value;
-  const diff = document.getElementById('gen-diff').value;
-  const time = document.getElementById('gen-time').value;
+Your job is to have a short, focused conversation to understand their preferences, then generate the recipe when they're ready.
 
-  const constraints = [
-    meal ? `Meal type: ${meal}` : '',
-    diff ? `Difficulty: ${diff}` : '',
-    time ? `Total time: under ${time} minutes` : '',
-  ].filter(Boolean).join('. ');
-
-  const systemPrompt = `You are a recipe generator. Return ONLY a JSON object with no extra text, no markdown fences.
-The JSON must have exactly these fields:
+Rules:
+- Start by asking what they want to make, then ask 2-4 focused clarifying questions about preferences (protein, flavors, time, dietary needs, equipment, serving size, etc). Ask them naturally, not as a numbered list every time.
+- Keep responses concise and conversational. No long essays.
+- When you have enough info (usually after 2-4 exchanges), offer to generate the recipe by saying something like "I have everything I need — ready to build the recipe?" or similar. The user can also ask you to generate at any time.
+- When the user confirms they want the recipe generated, output ONLY a JSON object (no other text, no markdown fences) with exactly these fields:
 {
   "title": "string",
-  "description": "one sentence description",
+  "description": "one sentence",
   "meal_type": "breakfast|lunch|dinner|snack|dessert|other",
   "difficulty": "easy|medium|hard",
-  "servings": "string like '4 servings'",
+  "servings": "string",
   "total_time_minutes": number,
   "prep_time_minutes": number,
   "cook_time_minutes": number,
-  "tags": ["array", "of", "strings"],
-  "ingredients": ["array of ingredient strings with amounts"],
-  "steps": ["array of step strings, clear and actionable"]
+  "tags": ["array"],
+  "ingredients": ["with amounts"],
+  "steps": ["clear actionable steps"]
 }
-Generate practical, delicious recipes. Steps should be clear and specific.`;
+- Never output JSON until the user has confirmed they want the recipe. Always converse first.`;
 
-  const userMsg = `Generate a recipe for: ${prompt}${constraints ? '. Constraints: ' + constraints : ''}`;
+function resetChat() {
+  chatHistory = [];
+  document.getElementById('chat-messages').innerHTML = '';
+  document.getElementById('gen-draft').innerHTML = '';
+  document.getElementById('gen-error').innerHTML = '';
+  document.getElementById('gen-recipe-btn').disabled = true;
+  document.getElementById('chat-hint').textContent = 'Start by describing what you want to make.';
+  draftRecipe = null;
+  addChatMsg('assistant', "What would you like to make? Tell me anything — an ingredient you have, a craving, a cuisine, or a meal type.");
+}
 
-  setGenerating(true);
-  clearError();
+function addChatMsg(role, text) {
+  const el = document.createElement('div');
+  el.className = 'chat-msg ' + role;
+  el.textContent = text;
+  const container = document.getElementById('chat-messages');
+  container.appendChild(el);
+  container.scrollTop = container.scrollHeight;
+  return el;
+}
 
+function chatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+
+async function sendChat() {
+  if (chatBusy) return;
+  const key = getApiKey();
+  if (!key) { showError('Please save your Anthropic API key first.'); return; }
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addChatMsg('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  const thinking = addChatMsg('thinking', 'Claude is thinking…');
+  chatBusy = true;
+  document.getElementById('chat-send').disabled = true;
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userMsg }]
-      })
+      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: CHAT_SYSTEM, messages: chatHistory })
     });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error?.message || `API error ${res.status}`);
-    }
-
+    if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err.error?.message||`API error ${res.status}`); }
     const data = await res.json();
-    const text = data.content[0]?.text || '';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const recipe = JSON.parse(clean);
-    recipe.id = 'gen_' + Date.now();
-    recipe.status = 'draft';
-    recipe.created_date = new Date().toISOString();
-    recipe.slug = recipe.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    draftRecipe = recipe;
-    renderDraft(recipe);
-  } catch (e) {
-    showError('Generation failed: ' + e.message);
+    const reply = data.content[0]?.text || '';
+    thinking.remove();
+    if (reply.trim().startsWith('{')) {
+      try {
+        const recipe = JSON.parse(reply.trim());
+        recipe.id = 'gen_' + Date.now();
+        recipe.status = 'draft';
+        recipe.created_date = new Date().toISOString();
+        recipe.slug = recipe.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        draftRecipe = recipe;
+        chatHistory.push({ role: 'assistant', content: reply });
+        addChatMsg('assistant', `Here's your recipe for "${recipe.title}" — review and edit it below before publishing.`);
+        renderDraft(recipe);
+        document.getElementById('gen-recipe-btn').disabled = true;
+        document.getElementById('chat-hint').textContent = 'Recipe generated. Review the draft below.';
+        return;
+      } catch(e) {}
+    }
+    chatHistory.push({ role: 'assistant', content: reply });
+    addChatMsg('assistant', reply);
+    if (chatHistory.length >= 2) {
+      document.getElementById('gen-recipe-btn').disabled = false;
+      document.getElementById('chat-hint').textContent = 'Ready? Click "Generate Recipe" or keep chatting.';
+    }
+  } catch(e) {
+    thinking.remove();
+    showError('Error: ' + e.message);
   } finally {
-    setGenerating(false);
+    chatBusy = false;
+    document.getElementById('chat-send').disabled = false;
+    document.getElementById('chat-input').focus();
   }
 }
 
+async function finalizeRecipe() {
+  if (chatBusy) return;
+  document.getElementById('chat-input').value = "Go ahead and generate the recipe now.";
+  await sendChat();
+}
+
+// ── DRAFT ───────────────────────────────────────────────────────────────────
 function renderDraft(r) {
-  const el = document.getElementById('gen-draft');
-  el.innerHTML = `
+  document.getElementById('gen-draft').innerHTML = `
     <div class="draft-section">
       <div class="draft-title">Review & edit before saving — <span>Draft</span></div>
-      <div class="draft-field">
-        <div class="draft-field-label">Title</div>
-        <input class="draft-input" id="d-title" value="${esc(r.title)}">
-      </div>
-      <div class="draft-field">
-        <div class="draft-field-label">Description</div>
-        <input class="draft-input" id="d-desc" value="${esc(r.description || '')}">
-      </div>
+      <div class="draft-field"><div class="draft-field-label">Title</div><input class="draft-input" id="d-title" value="${esc(r.title)}"></div>
+      <div class="draft-field"><div class="draft-field-label">Description</div><input class="draft-input" id="d-desc" value="${esc(r.description||'')}"></div>
       <div class="draft-row">
-        <div class="draft-field">
-          <div class="draft-field-label">Meal type</div>
-          <select class="draft-input" id="d-meal">
-            ${['breakfast','lunch','dinner','snack','dessert','other'].map(m =>
-              `<option value="${m}" ${r.meal_type === m ? 'selected' : ''}>${m}</option>`
-            ).join('')}
-          </select>
-        </div>
-        <div class="draft-field">
-          <div class="draft-field-label">Difficulty</div>
-          <select class="draft-input" id="d-diff">
-            ${['easy','medium','hard'].map(d =>
-              `<option value="${d}" ${r.difficulty === d ? 'selected' : ''}>${d}</option>`
-            ).join('')}
-          </select>
-        </div>
-        <div class="draft-field">
-          <div class="draft-field-label">Total time (min)</div>
-          <input class="draft-input" id="d-time" type="number" value="${r.total_time_minutes || ''}">
-        </div>
-        <div class="draft-field">
-          <div class="draft-field-label">Servings</div>
-          <input class="draft-input" id="d-servings" value="${esc(r.servings || '')}">
-        </div>
+        <div class="draft-field"><div class="draft-field-label">Meal type</div><select class="draft-input" id="d-meal">${['breakfast','lunch','dinner','snack','dessert','other'].map(m=>`<option value="${m}" ${r.meal_type===m?'selected':''}>${m}</option>`).join('')}</select></div>
+        <div class="draft-field"><div class="draft-field-label">Difficulty</div><select class="draft-input" id="d-diff">${['easy','medium','hard'].map(d=>`<option value="${d}" ${r.difficulty===d?'selected':''}>${d}</option>`).join('')}</select></div>
+        <div class="draft-field"><div class="draft-field-label">Total time (min)</div><input class="draft-input" id="d-time" type="number" value="${r.total_time_minutes||''}"></div>
+        <div class="draft-field"><div class="draft-field-label">Servings</div><input class="draft-input" id="d-servings" value="${esc(r.servings||'')}"></div>
       </div>
-      <div class="draft-field">
-        <div class="draft-field-label">Ingredients (one per line)</div>
-        <textarea class="draft-textarea" id="d-ingredients" rows="8">${(r.ingredients || []).join('\n')}</textarea>
-      </div>
-      <div class="draft-field">
-        <div class="draft-field-label">Steps (one per line)</div>
-        <textarea class="draft-textarea" id="d-steps" rows="10">${(r.steps || []).join('\n')}</textarea>
-      </div>
-      <div class="draft-field">
-        <div class="draft-field-label">Tags (comma separated)</div>
-        <input class="draft-input" id="d-tags" value="${(r.tags || []).join(', ')}">
-      </div>
+      <div class="draft-field"><div class="draft-field-label">Ingredients (one per line)</div><textarea class="draft-textarea" id="d-ingredients" rows="8">${(r.ingredients||[]).join('\n')}</textarea></div>
+      <div class="draft-field"><div class="draft-field-label">Steps (one per line)</div><textarea class="draft-textarea" id="d-steps" rows="10">${(r.steps||[]).join('\n')}</textarea></div>
+      <div class="draft-field"><div class="draft-field-label">Tags (comma separated)</div><input class="draft-input" id="d-tags" value="${(r.tags||[]).join(', ')}"></div>
       <div class="draft-actions">
         <button class="publish-btn" onclick="publishDraft()">Publish Recipe</button>
         <button class="discard-btn" onclick="discardDraft()">Discard</button>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
-function publishDraft() {
+async function publishDraft() {
   if (!draftRecipe) return;
-  const r = {
-    ...draftRecipe,
+  const r = { ...draftRecipe,
     title: document.getElementById('d-title').value.trim(),
     description: document.getElementById('d-desc').value.trim(),
     meal_type: document.getElementById('d-meal').value,
     difficulty: document.getElementById('d-diff').value,
-    total_time_minutes: parseInt(document.getElementById('d-time').value) || null,
+    total_time_minutes: parseInt(document.getElementById('d-time').value)||null,
     servings: document.getElementById('d-servings').value.trim(),
-    ingredients: document.getElementById('d-ingredients').value.split('\n').map(s => s.trim()).filter(Boolean),
-    steps: document.getElementById('d-steps').value.split('\n').map(s => s.trim()).filter(Boolean),
-    tags: document.getElementById('d-tags').value.split(',').map(s => s.trim()).filter(Boolean),
+    ingredients: document.getElementById('d-ingredients').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    steps: document.getElementById('d-steps').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    tags: document.getElementById('d-tags').value.split(',').map(s=>s.trim()).filter(Boolean),
     status: 'published',
     published_at: new Date().toISOString(),
-    slug: document.getElementById('d-title').value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+    slug: document.getElementById('d-title').value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),
   };
-  recipes.unshift(r);
-  saveRecipes();
+  await saveRecipeToFirestore(r);
   draftRecipe = null;
   document.getElementById('gen-draft').innerHTML = '';
-  document.getElementById('prompt-input').value = '';
   showToast('Recipe published!');
-  applyFilters();
   showPage('home');
 }
 
@@ -629,34 +838,23 @@ function discardDraft() {
 }
 
 // ── HELPERS ─────────────────────────────────────────────────────────────────
-function esc(s) { return (s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
-
-function setGenerating(on) {
-  const btn = document.getElementById('gen-btn');
-  const draft = document.getElementById('gen-draft');
-  btn.disabled = on;
-  btn.textContent = on ? 'Generating...' : 'Generate Recipe';
-  if (on) draft.innerHTML = '<div class="loading-spinner"><div class="spinner"></div>Claude is writing your recipe...</div>';
-}
-
-function showError(msg) {
-  document.getElementById('gen-error').innerHTML = `<div class="error-box">${msg}</div>`;
-}
-function clearError() { document.getElementById('gen-error').innerHTML = ''; }
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function showError(msg) { document.getElementById('gen-error').innerHTML = `<div class="error-box">${msg}</div>`; }
 
 let toastTimer;
 function showToast(msg) {
   clearTimeout(toastTimer);
   let t = document.getElementById('toast');
-  if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
-  t.textContent = msg;
-  t.style.display = 'block';
-  toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2500);
+  if (!t) { t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.style.display = 'block';
+  toastTimer = setTimeout(()=>{ t.style.display='none'; }, 2500);
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────
+const _apiKey = localStorage.getItem(API_KEY_STORE);
+if (_apiKey) { document.getElementById('api-key-input').value = _apiKey; updateApiStatus(true); }
 initData();
-applyFilters();
+resetChat();
 </script>
 </body>
 </html>
