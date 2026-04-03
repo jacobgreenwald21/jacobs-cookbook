@@ -1,0 +1,1 @@
+This archive is intentionally empty at v0. index.html is designated as the v0 production baseline — the first stable deployed version of the app. Future snapshots will be stored here as development progresses.
