@@ -113,6 +113,12 @@
   .api-status { font-size: 12px; margin-top: 6px; }
   .api-status.set { color: #6dbf8a; }
   .api-status.unset { color: var(--text3); }
+  .api-onboarding { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 1.5rem; }
+  .onboarding-title { font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--text); }
+  .onboarding-desc { font-size: 14px; color: var(--text2); margin-bottom: 1rem; line-height: 1.6; }
+  .onboarding-link { font-size: 13px; color: var(--accent); text-decoration: none; }
+  .onboarding-link:hover { text-decoration: underline; }
+  .onboarding-privacy { font-size: 12px; color: var(--text3); margin-top: 0.75rem; line-height: 1.5; }
 
   /* CHAT */
   .chat-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; margin-bottom: 1.5rem; flex: 1; min-height: 0; }
@@ -260,32 +266,38 @@
       <p class="ai-sub">Chat with Claude to build a recipe around your preferences, then publish it to your cookbook.</p>
     </div>
 
-    <div class="api-key-section">
-      <div class="api-key-label">Anthropic API Key</div>
-      <div class="api-key-row">
-        <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off">
-        <button class="api-save-btn" onclick="saveApiKey()">Save Key</button>
+    <div id="ai-key-gate" style="display:none">
+      <div class="api-onboarding">
+        <h2 class="onboarding-title">Add your Anthropic API key</h2>
+        <p class="onboarding-desc">The AI generator uses Claude directly from your browser. You need your own Anthropic API key to get started.</p>
+        <a class="onboarding-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Get a key at console.anthropic.com →</a>
+        <div class="api-key-row" style="margin-top:1rem;">
+          <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off" onkeydown="if(event.key==='Enter')saveOnboardingKey()">
+          <button class="api-save-btn" onclick="saveOnboardingKey()">Save Key</button>
+        </div>
+        <p class="onboarding-privacy">Your key is stored only in your browser and sent directly to Anthropic. It is never stored on our servers.</p>
       </div>
-      <div class="api-status" id="api-status"></div>
     </div>
 
-    <div class="chat-wrap">
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="chat-input-row">
-        <textarea class="chat-input" id="chat-input" placeholder="Tell Claude what you want to make..." rows="1" onkeydown="chatKeydown(event)" oninput="autoGrowInput(this)"></textarea>
-        <button class="chat-send-btn" id="chat-send" onclick="sendChat()">Send</button>
-      </div>
-      <div class="chat-controls">
-        <div class="chat-hint" id="chat-hint">Start by describing what you want to make.</div>
-        <div style="display:flex;gap:8px;">
-          <button class="new-chat-btn" onclick="resetChat()">New chat</button>
-          <button class="gen-recipe-btn" id="gen-recipe-btn" onclick="finalizeRecipe()" disabled>Generate Recipe</button>
+    <div id="ai-chat-panel" style="display:none">
+      <div class="chat-wrap">
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input-row">
+          <textarea class="chat-input" id="chat-input" placeholder="Tell Claude what you want to make..." rows="1" onkeydown="chatKeydown(event)" oninput="autoGrowInput(this)"></textarea>
+          <button class="chat-send-btn" id="chat-send" onclick="sendChat()">Send</button>
+        </div>
+        <div class="chat-controls">
+          <div class="chat-hint" id="chat-hint">Start by describing what you want to make.</div>
+          <div style="display:flex;gap:8px;">
+            <button class="new-chat-btn" onclick="resetChat()">New chat</button>
+            <button class="gen-recipe-btn" id="gen-recipe-btn" onclick="finalizeRecipe()" disabled>Generate Recipe</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div id="gen-error"></div>
-    <div id="gen-draft"></div>
+      <div id="gen-error"></div>
+      <div id="gen-draft"></div>
+    </div>
   </div>
 </div>
 
@@ -310,7 +322,7 @@ const ADMIN_UID = 'Ilqx5bsdUMdLQg9hPfDGIrZ7NXB3';
 
 // ── CONSTANTS ───────────────────────────────────────────────────────────────
 const RECIPES_KEY = 'cookbook_recipes_v2';
-const API_KEY_STORE = 'cookbook_api_key';
+const API_KEY_STORE = 'anthropic_api_key';
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let recipes = [];
@@ -478,6 +490,7 @@ function showPage(name) {
   const navEl = document.getElementById('nav-' + navTarget);
   if (navEl) navEl.classList.add('active');
   window.scrollTo(0, 0);
+  if (name === 'ai') showAiPanel();
 }
 
 // ── GRID ───────────────────────────────────────────────────────────────────
@@ -669,19 +682,28 @@ async function deleteRecipe(id) {
 }
 
 // ── API KEY ─────────────────────────────────────────────────────────────────
-function saveApiKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key) { updateApiStatus(false); return; }
-  localStorage.setItem(API_KEY_STORE, key);
-  updateApiStatus(true);
-  showToast('API key saved');
-}
-function updateApiStatus(isSet) {
-  const el = document.getElementById('api-status');
-  el.className = 'api-status ' + (isSet ? 'set' : 'unset');
-  el.textContent = isSet ? '✓ API key saved — ready to generate' : 'No key saved yet';
-}
 function getApiKey() { return localStorage.getItem(API_KEY_STORE) || ''; }
+
+function showAiPanel() {
+  const keyGate = document.getElementById('ai-key-gate');
+  const chatPanel = document.getElementById('ai-chat-panel');
+  if (getApiKey()) {
+    keyGate.style.display = 'none';
+    chatPanel.style.display = 'block';
+    if (!chatHistory.length) resetChat();
+  } else {
+    keyGate.style.display = 'block';
+    chatPanel.style.display = 'none';
+  }
+}
+
+function saveOnboardingKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) return;
+  localStorage.setItem(API_KEY_STORE, key);
+  showToast('API key saved');
+  showAiPanel();
+}
 
 // ── CHAT ────────────────────────────────────────────────────────────────────
 let chatHistory = [];
@@ -886,10 +908,7 @@ function showToast(msg) {
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────
-const _apiKey = localStorage.getItem(API_KEY_STORE);
-if (_apiKey) { document.getElementById('api-key-input').value = _apiKey; updateApiStatus(true); }
 initData();
-resetChat();
 </script>
 </body>
 </html>
