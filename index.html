@@ -65,7 +65,7 @@
   .recipe-card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-2px); }
   .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.7rem; }
   .card-title { font-family: 'Lora', serif; font-size: 1.05rem; color: var(--text); line-height: 1.35; flex: 1; margin-right: 10px; }
-  .fav-star { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text3); line-height: 1; padding: 2px; flex-shrink: 0; transition: color 0.15s; }
+  .fav-star { background: none; border: none; cursor: pointer; color: var(--text3); line-height: 1; padding: 2px; flex-shrink: 0; display: inline-flex; align-items: center; }
   .fav-star.active { color: var(--accent); }
   .card-desc { font-size: 13px; color: var(--text2); margin-bottom: 1rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .card-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
@@ -85,7 +85,7 @@
   .detail-title { font-size: 2rem; color: var(--text); margin-bottom: 0.8rem; }
   .detail-desc { color: var(--text2); font-size: 0.95rem; margin-bottom: 1.2rem; line-height: 1.6; }
   .detail-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
-  .detail-fav { background: none; border: 1px solid var(--border2); color: var(--text2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; transition: all 0.15s; }
+  .detail-fav { background: none; border: 1px solid var(--border2); color: var(--text2); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
   .detail-fav.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,0.1); }
   .detail-divider { border: none; border-top: 1px solid var(--border); margin: 1.8rem 0; }
   .detail-section-title { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
@@ -520,7 +520,7 @@ function renderGrid(list) {
     const isFav = favs.has(r.id);
     const time = r.total_time_minutes ? `${r.total_time_minutes} min` : '';
     const diffClass = r.difficulty === 'hard' ? 'badge-diff hard' : 'badge-diff';
-    const favStar = currentUser ? `<button class="fav-star ${isFav?'active':''}" onclick="event.stopPropagation();toggleFav('${r.id}')" title="Favorite">★</button>` : '';
+    const favStar = currentUser ? `<button class="fav-star ${isFav?'active':''}" onclick="event.stopPropagation();toggleFav('${r.id}')" title="Favorite"><svg width="16" height="16" viewBox="0 0 24 24" fill="${isFav?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>` : '';
     return `<div class="recipe-card" onclick="openDetail('${r.id}')">
       <div class="card-top">
         <div class="card-title">${r.title}</div>
@@ -580,9 +580,11 @@ function renderDetail(id) {
   if (r.difficulty) metas.push(`<span class="badge ${r.difficulty==='hard'?'badge-diff hard':'badge-diff'}">${r.difficulty}</span>`);
   if (r.meal_type) metas.push(`<span class="badge badge-meal">${r.meal_type}</span>`);
 
+  const heartOutline = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  const heartFilled = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
   const favBtn = currentUser
-    ? `<button class="detail-fav ${isFav?'active':''}" onclick="toggleFav('${r.id}')">${isFav?'★ Favorited':'☆ Favorite'}</button>`
-    : `<button class="detail-fav" onclick="showToast('Sign in to save favorites')" style="opacity:0.5">☆ Favorite</button>`;
+    ? `<button class="detail-fav ${isFav?'active':''}" onclick="toggleFav('${r.id}')">${isFav?heartFilled:heartOutline}${isFav?'Favorited':'Favorite'}</button>`
+    : `<button class="detail-fav" onclick="showToast('Sign in to save favorites')" style="opacity:0.5">${heartOutline}Favorite</button>`;
 
   const editBtn = isAllowedEditor ? `<button class="nav-btn" onclick="renderEditDetail('${r.id}')">Edit</button>` : '';
 
