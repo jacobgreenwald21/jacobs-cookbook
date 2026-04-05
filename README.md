@@ -11,6 +11,12 @@ A personal AI-powered cookbook web app. Browse, filter, and search recipes. Sign
 - Google Sign-in to unlock favorites, editing, and AI generation
 - AI Generate tab: multi-turn chat with Claude to build a recipe → editable draft → publish to the cookbook
 - Admin-only delete (UID hardcoded in `index.html`)
+- Admin-grantable editor whitelist via Firestore `allowedEditors` collection
+- AI restricted to cooking topics only — cannot be overridden
+- AI knows your existing cookbook recipes (injected into system prompt)
+- Serving size scaler on recipe detail — scales ingredient quantities in real time
+- Print view on recipe detail — clean white layout, hides all UI chrome
+- API key onboarding flow for new users with link to Anthropic console
 
 ## Stack
 

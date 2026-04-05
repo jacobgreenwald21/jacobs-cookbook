@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.0] — Phase 5b Complete (April 2026)
+
+- feat: admin-grantable editor whitelist (allowedEditors Firestore collection)
+- fix: Firestore security rules — public reads, authenticated writes, admin-only deletes
+- fix: restrict AI to cooking topics only
+- fix: remove AI flavor profile defaults
+- feat: inject cookbook recipe context into AI system prompt
+- feat: expanded AI chat UI with auto-growing input
+- feat: favorites visual upgrade (solid/outline SVG heart, gold accent)
+- feat: API key onboarding flow with Anthropic link
+- feat: serving size scaler on recipe detail page
+- feat: print view for recipe detail
+
 ## [v0.0] — v0 baseline established
 
 Initial stable version. Single-file app (`index.html`) deployed to Firebase Hosting.
