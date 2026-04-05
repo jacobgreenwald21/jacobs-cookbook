@@ -96,6 +96,9 @@
   .steps-list li::before { content: counter(steps); background: var(--surface2); color: var(--accent); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; margin-top: 1px; border: 1px solid var(--border2); }
   .tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1.5rem; }
   .tag { background: var(--surface2); border: 1px solid var(--border); color: var(--text3); padding: 3px 10px; border-radius: 20px; font-size: 12px; }
+  .related-list { display: flex; flex-direction: column; gap: 6px; }
+  .related-link { background: none; border: none; color: var(--accent); cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 14px; padding: 0; text-align: left; transition: color 0.15s; }
+  .related-link:hover { color: var(--text); text-decoration: underline; }
   .serving-scaler { display: inline-flex; align-items: center; gap: 5px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 20px; padding: 3px 6px 3px 10px; font-size: 11px; letter-spacing: 0.02em; }
   .scaler-label { color: var(--text2); font-weight: 500; }
   .scaler-count { color: var(--text); min-width: 14px; text-align: center; font-weight: 500; }
@@ -659,6 +662,17 @@ function renderDetail(id) {
     ${r.tags&&r.tags.length ? `
       <hr class="detail-divider">
       <div class="tags-row">${r.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''}
+    ${(() => {
+      const currentTags = new Set(r.tags || []);
+      const related = recipes
+        .filter(x => x.id !== r.id && x.status === 'published')
+        .map(x => ({ id: x.id, title: x.title, overlap: (x.tags || []).filter(t => currentTags.has(t)).length }))
+        .filter(x => x.overlap > 0)
+        .sort((a, b) => b.overlap - a.overlap)
+        .slice(0, 2);
+      if (!related.length) return '';
+      return `<hr class="detail-divider"><div class="detail-section-title">Related Recipes</div><div class="related-list">${related.map(x => `<button class="related-link" onclick="openDetail('${x.id}')">${esc(x.title)}</button>`).join('')}</div>`;
+    })()}
   `;
 }
 
