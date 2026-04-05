@@ -1,59 +1,77 @@
 # Jacob's Cookbook
 
-A personal AI-powered cookbook web app. Browse, filter, and search recipes. Sign in to favorite them, edit them, or use the AI chat to generate new ones.
+A personal AI-powered cookbook web app. Built as a functional tool and a BUSN 4400 class project.
 
-**Live:** https://jacobs-cookbook.web.app
+**Live:** https://jacobs-cookbook.web.app  
+**Version:** v1.1.0
 
-## What it does
-
-- Recipe grid with search, filters (meal type, difficulty, cook time), and sort
-- Full recipe detail pages — ingredients, numbered steps, tags, timing
-- Google Sign-in to unlock favorites, editing, and AI generation
-- AI Generate tab: multi-turn chat with Claude to build a recipe → editable draft → publish to the cookbook
-- Admin-only delete (UID hardcoded in `index.html`)
-- Admin-grantable editor whitelist via Firestore `allowedEditors` collection
-- AI restricted to cooking topics only — cannot be overridden
-- AI knows your existing cookbook recipes (injected into system prompt)
-- Serving size scaler on recipe detail — scales ingredient quantities in real time
-- Print view on recipe detail — clean white layout, hides all UI chrome
-- API key onboarding flow for new users with link to Anthropic console
+---
 
 ## Stack
 
-- **Frontend:** Single HTML file (`index.html`) — no framework, no build step
-- **Database:** Firebase Firestore (real-time listener)
-- **Auth:** Firebase Google Auth
-- **AI:** Anthropic API (`claude-sonnet-4-20250514`), called client-side with a user-supplied API key
-- **Hosting:** Firebase Hosting
-- **Fonts:** Lora + DM Sans via Google Fonts CDN
-- **Firebase SDK:** Compat v10.12.0 via CDN
+Single HTML file (`index.html`) — no framework, no build step.
+
+- Firebase Hosting + Firestore + Firebase Auth (Google sign-in)
+- Anthropic API (Claude-powered AI Kitchen)
+- Firebase compat SDK v10.12.0 via CDN script tags
+
+---
+
+## Features
+
+- Guest browse, filter, sort
+- Google sign-in / sign-out
+- Firestore-synced favorites (SVG heart, gold when active)
+- User recipe creation and publishing
+- Admin-grantable editor whitelist
+- Admin delete
+- Related recipes on detail page (tag-overlap ranked, up to 2)
+- Conversational AI recipe generation (AI Kitchen tab)
+- AI restricted to cooking topics only
+- AI asks about cuisine preference before suggesting — no defaults
+- AI knows all published recipes before each conversation
+- AI mentions close existing matches naturally before generating
+- API key onboarding for new users
+- Serving size scaler (real-time, resets on page open)
+- Print view (clean white stylesheet)
+- Expanded AI chat UI with auto-growing input
+
+---
 
 ## Deploy
-
-Requires Firebase CLI.
-
 ```bash
-firebase login       # if not already authenticated
-firebase deploy      # deploys to jacobs-cookbook.web.app
+cd ~/Desktop/AI/Cookbook && firebase deploy
 ```
 
-Hosting is configured in `firebase.json` with the project root as public. No build step.
+⚠️ Never open `index.html` in TextEdit on Mac — it corrupts the file. Always use VS Code or terminal only.
 
-## TextEdit warning
+---
 
-Do not open `index.html` in TextEdit. TextEdit will convert straight quotes to curly quotes and break the JavaScript. Use VS Code or any proper code editor.
+## Git Workflow
+```bash
+# Feature work
+git checkout dev
+git add . && git commit -m "feat: description" && git push origin dev
 
-## Repo structure
+# Ship to production
+git checkout main && git merge dev && git push origin main && firebase deploy
 
+# Keep dev in sync
+git checkout dev && git merge main && git push origin dev
 ```
-index.html          # the entire app
-firebase.json       # Firebase Hosting config
-README.md
-CHANGELOG.md
-docs/
-  decisions.md      # architecture decisions
-  launch-notes.md   # v0 launch state, known limitations, deploy notes
-archive/
-  README.md
-  cookbook-v0-prototype.html   # earlier localStorage-only prototype (no auth, no Firestore)
-```
+
+---
+
+## Firestore Collections
+
+- `recipes/{recipeId}` — public read, authenticated write, admin delete
+- `favorites/{userId}` — user-scoped read/write
+- `allowedEditors/{uid}` — authenticated read, admin-only write
+
+---
+
+## Critical IDs
+
+- **Admin UID:** `Ilqx5bsdUMdLQg9hPfDGIrZ7NXB3`
+- **Admin Gmail:** jacobgreenwald21@gmail.com
+- **Firebase project:** jacobs-cookbook

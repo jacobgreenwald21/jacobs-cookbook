@@ -1,57 +1,69 @@
-# Architecture Decisions
+# Architectural Decisions
 
-## Single-file, no build step
+Key decisions made during development and the reasoning behind them.
 
-The entire app lives in `index.html`. No framework, no bundler, no node_modules. Firebase and the fonts are loaded via CDN. This keeps the deployment surface minimal — `firebase deploy` pushes one file.
+---
 
-The tradeoff is that the file gets long. Acceptable at this scale; worth revisiting if the codebase grows significantly.
+## Single HTML File Architecture
 
-## Firebase compat SDK v10.12.0 (CDN)
+**Decision:** Build the entire app as one `index.html` file with no framework and no build step.
 
-Using the compat (v8-style) SDK rather than the modular v9+ SDK. The compat SDK is loaded via three CDN script tags:
+**Why:** Earlier attempts with Next.js + Supabase and Lovable both failed due to environment complexity, not product complexity. A single file deployable via `firebase deploy` eliminates the entire class of problems that killed those attempts. Firebase compat SDK loads via CDN script tags — no Node, no bundler, no config files.
 
-- `firebase-app-compat.js`
-- `firebase-auth-compat.js`
-- `firebase-firestore-compat.js`
+**Tradeoff:** Not scalable for a large team or a complex product. Acceptable for a personal tool at this scope.
 
-Reason: simpler syntax for a single-file app with no module bundler. The compat SDK lets us use `firebase.auth()`, `firebase.firestore()`, etc. directly without imports or tree-shaking concerns.
+---
 
-## Firestore for recipe storage
+## Firebase Over Supabase
 
-Recipes are stored in a `recipes` Firestore collection. On first load, the app checks whether Firestore is empty and seeds it from the `SEED` array baked into the JS. After that, the app sets up a real-time `onSnapshot` listener filtered to `status == 'published'`, so the grid updates live if a recipe is added or edited elsewhere.
+**Decision:** Firebase Hosting + Firestore + Firebase Auth instead of Supabase + Next.js.
 
-Fallback: if Firestore fails (network error, permission issue), the app falls back to the SEED array so the page still renders.
+**Why:** Firebase works directly from a CDN-loaded script tag in a single HTML file. Supabase requires a server-side runtime or a JavaScript bundler to use properly. Firebase Auth with Google sign-in is one function call. Firestore real-time listeners are simpler than Supabase's Realtime subscriptions for this use case.
 
-## Google Auth for access control
+---
 
-Sign-in is via Google OAuth popup (`signInWithPopup`). Any Google account can sign in. Being signed in unlocks:
+## Client-Side Sorting Instead of Firestore Compound Queries
 
-- The AI Generate tab
-- The favorites system (stored in Firestore per user)
-- The Edit button on recipe detail pages
+**Decision:** Load all recipes from Firestore, then sort and filter entirely in JavaScript.
 
-## Admin role via hardcoded UID
+**Why:** Firestore `where().orderBy()` compound queries require a composite index. Without it, the query silently returns zero results — no error, no warning. Removing `orderBy()` from Firestore queries and sorting client-side avoids this failure mode entirely. At the current recipe count, client-side sorting has no meaningful performance cost.
 
-There is no roles collection or custom claims. Admin status is determined by comparing `currentUser.uid` to a single hardcoded `ADMIN_UID` constant in the JS. The admin can delete recipes; regular signed-in users can only edit.
+---
 
-This is intentional for a single-admin app. If multi-admin support is ever needed, move to Firestore-based roles or Firebase custom claims.
+## Admin-Grantable Editor Whitelist
 
-## Favorites in Firestore (per user)
+**Decision:** Replaced open authenticated editing with a Firestore-backed `allowedEditors/{uid}` collection. Documents in this collection grant edit access; their absence denies it.
 
-Favorites are stored in a `favorites/{uid}` document as an array of recipe IDs. This means they sync across devices for a signed-in user. Unauthenticated users cannot favorite anything.
+**Why:** Open editing allowed any signed-in Google account to create and publish recipes, which was too permissive. The whitelist gives Jacob control without requiring a full role system. Access can be granted or revoked in the Firebase console with no redeploy.
 
-## Anthropic API called directly from the browser
+---
 
-The AI chat sends requests directly to `api.anthropic.com/v1/messages` from client-side JS. This requires the `anthropic-dangerous-direct-browser-access: true` header and the user's API key, which is stored in `localStorage` (not in the codebase).
+## API Key Stored in localStorage, Never on Server
 
-The user supplies their own API key. There is no server-side proxy. This means the key is visible in the browser's localStorage and network tab — acceptable for a personal single-user app, but not appropriate for a public multi-user product.
+**Decision:** The Anthropic API key is entered by the user, stored in localStorage, and sent directly to the Anthropic API from the browser. It never touches Firebase or any server Jacob controls.
 
-## Multi-turn chat for recipe generation
+**Why:** Storing API keys server-side would require a backend proxy or Firebase Cloud Function, adding architecture complexity. localStorage keeps it simple and keeps the key under the user's control. The tradeoff is that the key is visible in browser storage — acceptable for a personal tool used by known users.
 
-The AI Generate page uses a conversational interface. Claude asks clarifying questions about preferences before generating. The system prompt instructs Claude to converse first and output JSON only when the user confirms they want the recipe. The JSON is parsed client-side and rendered into an editable draft form before the user publishes.
+---
 
-Human-in-the-loop is enforced by design: there is no path from chat to Firestore that bypasses the review step.
+## `buildSystemPrompt()` Prepends Live Recipe Context
 
-## Seed data baked into JS
+**Decision:** Before every AI Kitchen message, `buildSystemPrompt()` builds a formatted summary of all published recipes and prepends it to the system prompt.
 
-The 16 initial recipes are stored as a `SEED` constant in the JS. They are written to Firestore once on first init. After that, Firestore is the source of truth and the seed array is only used as a fallback if Firestore is unavailable.
+**Why:** Claude has no persistent memory between sessions. Injecting the full recipe list at inference time lets Claude reference existing recipes, suggest variations, and avoid duplicates without any additional infrastructure. No extra Firestore reads — the already-loaded `recipes` array is used directly.
+
+---
+
+## Related Recipes Computed Client-Side, No Extra Reads
+
+**Decision:** Related recipes on the detail page are computed by comparing the current recipe's tags against the already-loaded `recipes` array in memory.
+
+**Why:** Consistent with the client-side filtering approach. No additional Firestore reads, no latency, no index requirements. Tag overlap is computed as a simple set intersection — top 2 results by overlap count.
+
+---
+
+## Two-Branch Git Strategy
+
+**Decision:** All feature work on `dev`. `main` always matches the live Firebase deployment. Merge only when stable.
+
+**Why:** Prevents broken code from reaching production. Firebase deploys from whatever branch you run `firebase deploy` on, so the branch discipline enforces production stability.

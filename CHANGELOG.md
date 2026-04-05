@@ -1,30 +1,48 @@
 # Changelog
 
-## [v1.0] — Phase 5b Complete (April 2026)
+All notable changes to Jacob's Cookbook are documented here.
 
-- feat: admin-grantable editor whitelist (allowedEditors Firestore collection)
-- fix: Firestore security rules — public reads, authenticated writes, admin-only deletes
-- fix: restrict AI to cooking topics only
-- fix: remove AI flavor profile defaults
-- feat: inject cookbook recipe context into AI system prompt
-- feat: expanded AI chat UI with auto-growing input
-- feat: favorites visual upgrade (solid/outline SVG heart, gold accent)
-- feat: API key onboarding flow with Anthropic link
-- feat: serving size scaler on recipe detail page
-- feat: print view for recipe detail
+---
 
-## [v0.0] — v0 baseline established
+## [1.1.0] — April 2026
 
-Initial stable version. Single-file app (`index.html`) deployed to Firebase Hosting.
+### Related Recipes
+- Recipe detail page now shows up to 2 related recipes below the tags row
+- Matches are ranked by tag overlap count — highest overlap shown first
+- Rendered as plain clickable names; clicking opens that recipe's detail page
+- If no matches exist, nothing renders — no empty section, no header
 
-Features at baseline:
-- 16 seed recipes across 6 meal types
-- Recipe grid with search, filters, and sort
-- Recipe detail pages
-- Google Sign-in
-- Favorites synced to Firestore per user
-- Edit recipe (any signed-in user)
-- Delete recipe (admin only)
-- AI Generate page — multi-turn chat → editable draft → publish
+### AI Similar Recipe Nudge
+- Added instruction to `CHAT_SYSTEM` prompting Claude to briefly mention a close existing match before generating
+- Triggers only on genuine similarity (same protein + same general technique or flavor profile)
+- Never blocks generation — Claude always proceeds if the user wants to continue
+- Tone is conversational, not a warning
 
-Stack: Firebase compat SDK v10.12.0, Firestore, Google Auth, Anthropic API (`claude-sonnet-4-20250514`), Firebase Hosting.
+---
+
+## [1.0.0] — April 2026
+
+### Phase 5b — Full Feature Build (10 features)
+- **Firestore security rules** — public reads, authenticated writes, admin-only deletes, user-scoped favorites
+- **Admin-grantable editor whitelist** — `allowedEditors/{uid}` Firestore collection; Jacob grants access via Firebase console, no redeploy needed
+- **AI cooking guardrail** — system prompt blocks non-cooking topics and jailbreak attempts
+- **AI flavor bias fix** — Claude asks about cuisine preference before suggesting; no Asian/Mediterranean defaults
+- **AI recipe context injection** — `buildSystemPrompt()` prepends all published recipes to every message; Claude can reference, suggest variations, and avoid duplicates
+- **Expanded AI chat UI** — panel fills viewport; input auto-grows to 200px then scrolls; send button anchors to bottom
+- **SVG heart favorites** — inline SVG hearts replace star character; outline when unfavorited, solid gold when favorited; no animation
+- **API key onboarding** — signed-in users without a saved Anthropic key see an onboarding screen linking to console.anthropic.com; key stored in localStorage only, never touches server
+- **Serving size scaler** — live +/− control on recipe detail; handles whole+fraction, bare fraction, integer, and decimal quantities; Firestore data unchanged; resets on each page open
+- **Print view** — `@media print` stylesheet hides nav and action bar; scaler buttons hidden but serving count readable; scaled amounts print from current DOM state
+
+### Phase 5a — GitHub Repo Setup
+- Public repo initialized at github.com/jacobgreenwald21/jacobs-cookbook
+- Branch strategy: `dev` for all feature work, `main` always matches live Firebase deployment
+- Commit format: `feat:` / `fix:` / `chore:`
+- Docs folder: `decisions.md`, `launch-notes.md`
+- Archive folder for pre-Firebase artifacts
+
+### Phase 1–5 — Initial Build
+- Single HTML file architecture — no framework, no build step
+- Firebase Hosting + Firestore + Firebase Auth (Google sign-in) + Anthropic API
+- Firebase compat SDK v10.12.0 via CDN
+- Guest browse, filter, sort; Google sign-in; Firestore-synced favorites; user recipe creation and publishing; admin delete; conversational AI recipe generation

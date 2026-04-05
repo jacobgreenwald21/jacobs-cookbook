@@ -1,53 +1,53 @@
-# Launch Notes — v0 Baseline
+# Launch Notes
 
-**Live URL:** https://jacobs-cookbook.web.app
-**Deployed via:** Firebase Hosting
-**Baseline date:** April 2026
+Running log of what shipped, when, and any important context.
 
-## What shipped at v0
+---
 
-- 16 seed recipes across breakfast, lunch, dinner, snack, dessert, and other categories
-- Recipe grid with search, filters (meal type, difficulty, time), sort (newest, fastest, alphabetical, difficulty), and favorites
-- Recipe detail pages (full ingredients, numbered steps, tags, timing badges)
-- Google Sign-in — any Google account can sign in
-- Favorites synced to Firestore per signed-in user
-- Edit recipe form available to any signed-in user (saves to Firestore)
-- Delete recipe available to admin only
-- AI Generate page (sign-in required) — multi-turn chat with Claude to build a recipe, followed by an editable draft form before publishing
-- Firebase Firestore as the live data store; seed data auto-loaded on first visit
+## v1.1.0 — April 2026
 
-## Known limitations at v0
+**Features shipped:**
+- Related recipes on recipe detail page — tag-overlap ranked, up to 2, clickable names, nothing rendered if no matches
+- AI similar recipe nudge — Claude mentions close existing matches conversationally before generating; never blocks; triggers on genuine similarity only
 
-- Admin UID is hardcoded in the client-side JS. Not a security risk for this app (it controls UI only; Firestore rules are the real gate), but it means any UID change requires a redeploy.
-- Anthropic API key is stored in the user's `localStorage`. Acceptable for personal use; not suitable if this ever becomes multi-user.
-- No Firestore security rules documented here — should be verified before any public traffic beyond the owner.
-- No offline support. If Firestore is unreachable, the app falls back to seed data (read-only).
-- No image support. Recipe cards and detail pages are text-only.
-- No pagination. All published recipes are loaded in a single Firestore query. Will need pagination or infinite scroll at scale.
-- Edit access is not limited to admin — any signed-in user can edit recipes. This is intentional for now (single-user app in practice) but worth revisiting.
+**Process:** Both features built on `dev`, smoke tested on deployed `dev`, merged to `main`, deployed.
 
-## Deploy instructions
+---
 
-Prerequisites: Firebase CLI installed and authenticated (`firebase login`).
+## v1.0.0 — April 2026
 
-```
-firebase deploy
-```
+**Phase 5b — 10 features built and shipped:**
 
-This deploys `index.html` and anything in the project root (per `firebase.json` which sets `public: "."`). The `archive/`, `docs/`, and `.claude/` directories are served but not linked from the app — not a concern.
+1. Firestore security rules confirmed correct — public reads, authenticated writes, admin-only deletes
+2. Admin-grantable editor whitelist via `allowedEditors` Firestore collection
+3. AI cooking-only guardrail in system prompt
+4. AI flavor bias fix — Claude asks before suggesting cuisine
+5. AI recipe context injection via `buildSystemPrompt()`
+6. Expanded AI chat UI — full viewport panel, auto-growing input, anchored send button
+7. SVG heart favorites — outline/solid gold, no animation
+8. API key onboarding screen with link to Anthropic console
+9. Serving size scaler — real-time, handles all quantity formats, non-destructive
+10. Print view — `@media print` stylesheet, scaled amounts print correctly
 
-To deploy hosting only:
+**Phase 5a — Repo setup:**
+- GitHub repo initialized: github.com/jacobgreenwald21/jacobs-cookbook
+- Branch strategy, commit format, and docs folder established
+- `decisions.md` and `launch-notes.md` created
 
-```
-firebase deploy --only hosting
-```
+**Initial launch context:**
+- App migrated from Base44 (hit prompt limit) to single HTML file + Firebase
+- 16 seed recipes migrated via CSV export
+- Deployed to https://jacobs-cookbook.web.app
+- Admin UID hardcoded: `Ilqx5bsdUMdLQg9hPfDGIrZ7NXB3`
 
-## Firebase project
+---
 
-- **Project ID:** jacobs-cookbook
-- **Auth domain:** jacobs-cookbook.firebaseapp.com
-- **Storage bucket:** jacobs-cookbook.firebasestorage.app
+## Pre-v1.0 — Development History
 
-## Model
+Three failed attempts before the current stack:
 
-The AI Generate feature uses `claude-sonnet-4-20250514` with a max of 1000 tokens per chat message. The system prompt instructs Claude to converse first and only output a JSON recipe object when the user confirms they're ready.
+1. **Next.js + Supabase** — Mac environment issues (conflicting Node, broken PATH, Conda interference). App never ran.
+2. **Lovable** — PDF extraction broken due to Node.js libraries incompatible with Deno (Supabase Edge runtime). Abandoned.
+3. **Base44** — Fully functional but hit prompt limit with no way to export code or add features.
+
+Current single-file Firebase approach was chosen specifically to eliminate environment complexity.
