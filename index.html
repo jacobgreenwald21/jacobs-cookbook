@@ -320,6 +320,7 @@ let currentDetail = null;
 let draftRecipe = null;
 let currentUser = null;
 let isAdmin = false;
+let isAllowedEditor = false;
 let authMenuOpen = false;
 
 // ── SEED DATA ───────────────────────────────────────────────────────────────
@@ -375,8 +376,10 @@ auth.onAuthStateChanged(async user => {
   isAdmin = user && user.uid === ADMIN_UID;
   updateAuthUI();
   if (user) {
+    isAllowedEditor = isAdmin || await checkAllowedEditor(user.uid);
     await loadFavsFromFirestore();
   } else {
+    isAllowedEditor = false;
     favs = new Set();
   }
   applyFilters();
@@ -443,6 +446,13 @@ document.addEventListener('click', e => {
 });
 
 // ── FIRESTORE FAVORITES ─────────────────────────────────────────────────────
+async function checkAllowedEditor(uid) {
+  try {
+    const doc = await db.collection('allowedEditors').doc(uid).get();
+    return doc.exists;
+  } catch(e) { return false; }
+}
+
 async function loadFavsFromFirestore() {
   if (!currentUser) return;
   try {
@@ -574,7 +584,7 @@ function renderDetail(id) {
     ? `<button class="detail-fav ${isFav?'active':''}" onclick="toggleFav('${r.id}')">${isFav?'★ Favorited':'☆ Favorite'}</button>`
     : `<button class="detail-fav" onclick="showToast('Sign in to save favorites')" style="opacity:0.5">☆ Favorite</button>`;
 
-  const editBtn = currentUser ? `<button class="nav-btn" onclick="renderEditDetail('${r.id}')">Edit</button>` : '';
+  const editBtn = isAllowedEditor ? `<button class="nav-btn" onclick="renderEditDetail('${r.id}')">Edit</button>` : '';
 
   document.getElementById('detail-content').innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
@@ -601,7 +611,7 @@ function renderDetail(id) {
 }
 
 function renderEditDetail(id) {
-  if (!currentUser) return;
+  if (!isAllowedEditor) return;
   const r = recipes.find(x => x.id === id);
   if (!r) return;
   document.getElementById('detail-content').innerHTML = `
@@ -630,7 +640,7 @@ function renderEditDetail(id) {
 }
 
 async function saveEdit(id) {
-  if (!currentUser) return;
+  if (!isAllowedEditor) return;
   const idx = recipes.findIndex(x => x.id === id);
   if (idx === -1) return;
   const updated = { ...recipes[idx],
