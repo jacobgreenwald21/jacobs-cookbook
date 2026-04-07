@@ -4,6 +4,23 @@ Running log of what shipped, when, and any important context.
 
 ---
 
+## v1.2.0 — April 2026
+
+**Features shipped:**
+- Firebase Cloud Function `anthropicProxy` — Anthropic API key moved server-side via Firebase Secrets
+- API key onboarding screen removed — AI Kitchen loads directly for signed-in users
+- Firebase project upgraded to Blaze plan
+- Cloud Run IAM policy set to allow unauthenticated invocations (Firebase Auth enforced inside function)
+
+**Process:** Built and debugged on `dev`, merged to `main`, deployed.
+
+**Hard-won lessons:**
+- Gen 2 Firebase callable functions deploy on Cloud Run, which requires a separate IAM policy binding to allow invocations — `gcloud run services add-iam-policy-binding` with `allUsers` + `roles/run.invoker` is required even for Firebase-authenticated callable functions
+- `firebase-functions-test` in devDependencies pulls in jest as a transitive dependency, which breaks Cloud Build's `npm ci` — remove devDependencies entirely from `functions/package.json`
+- `npm install --legacy-peer-deps` resolves peer dependency conflicts but must be run after deleting the lock file to generate a clean one
+
+---
+
 ## v1.1.0 — April 2026
 
 **Features shipped:**
