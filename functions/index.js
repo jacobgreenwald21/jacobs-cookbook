@@ -9,10 +9,6 @@ const anthropicKey = defineSecret('ANTHROPIC_KEY');
 exports.anthropicProxy = onCall(
   { secrets: [anthropicKey], cors: ['https://jacobs-cookbook.web.app'] },
   async (request) => {
-    if (!request.auth) {
-      throw new HttpsError('unauthenticated', 'Must be signed in to use the AI Kitchen.');
-    }
-
     const { messages, system, model, max_tokens } = request.data;
 
     let res;
