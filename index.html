@@ -110,23 +110,6 @@
   .ai-header { margin-bottom: 1.5rem; }
   .ai-title { font-size: 1.8rem; margin-bottom: 0.4rem; }
   .ai-sub { color: var(--text2); font-size: 0.9rem; }
-  .api-key-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
-  .api-key-label { font-size: 12px; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; font-weight: 500; }
-  .api-key-row { display: flex; gap: 8px; }
-  .api-key-input { flex: 1; background: var(--surface2); border: 1px solid var(--border2); color: var(--text); padding: 8px 12px; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
-  .api-key-input:focus { border-color: var(--accent); }
-  .api-key-input::placeholder { color: var(--text3); }
-  .api-save-btn { background: var(--accent); color: #0f0f0f; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; white-space: nowrap; }
-  .api-save-btn:hover { background: var(--accent2); color: #fff; }
-  .api-status { font-size: 12px; margin-top: 6px; }
-  .api-status.set { color: #6dbf8a; }
-  .api-status.unset { color: var(--text3); }
-  .api-onboarding { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; margin-bottom: 1.5rem; }
-  .onboarding-title { font-size: 1.2rem; margin-bottom: 0.75rem; color: var(--text); }
-  .onboarding-desc { font-size: 14px; color: var(--text2); margin-bottom: 1rem; line-height: 1.6; }
-  .onboarding-link { font-size: 13px; color: var(--accent); text-decoration: none; }
-  .onboarding-link:hover { text-decoration: underline; }
-  .onboarding-privacy { font-size: 12px; color: var(--text3); margin-top: 0.75rem; line-height: 1.5; }
 
   /* CHAT */
   .chat-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); display: flex; flex-direction: column; overflow: hidden; margin-bottom: 1.5rem; flex: 1; min-height: 0; }
@@ -225,6 +208,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-functions-compat.js"></script>
 </head>
 <body>
 
@@ -299,19 +283,6 @@
       <p class="ai-sub">Chat with Claude to build a recipe around your preferences, then publish it to your cookbook.</p>
     </div>
 
-    <div id="ai-key-gate" style="display:none">
-      <div class="api-onboarding">
-        <h2 class="onboarding-title">Add your Anthropic API key</h2>
-        <p class="onboarding-desc">The AI generator uses Claude directly from your browser. You need your own Anthropic API key to get started.</p>
-        <a class="onboarding-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">Get a key at console.anthropic.com →</a>
-        <div class="api-key-row" style="margin-top:1rem;">
-          <input class="api-key-input" type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off" onkeydown="if(event.key==='Enter')saveOnboardingKey()">
-          <button class="api-save-btn" onclick="saveOnboardingKey()">Save Key</button>
-        </div>
-        <p class="onboarding-privacy">Your key is stored only in your browser and sent directly to Anthropic. It is never stored on our servers.</p>
-      </div>
-    </div>
-
     <div id="ai-chat-panel" style="display:none">
       <div class="chat-wrap">
         <div class="chat-messages" id="chat-messages"></div>
@@ -355,7 +326,6 @@ const ADMIN_UID = 'Ilqx5bsdUMdLQg9hPfDGIrZ7NXB3';
 
 // ── CONSTANTS ───────────────────────────────────────────────────────────────
 const RECIPES_KEY = 'cookbook_recipes_v2';
-const API_KEY_STORE = 'anthropic_api_key';
 
 // ── STATE ──────────────────────────────────────────────────────────────────
 let recipes = [];
@@ -769,28 +739,10 @@ function adjustServings(delta) {
   });
 }
 
-// ── API KEY ─────────────────────────────────────────────────────────────────
-function getApiKey() { return localStorage.getItem(API_KEY_STORE) || ''; }
-
+// ── AI PANEL ────────────────────────────────────────────────────────────────
 function showAiPanel() {
-  const keyGate = document.getElementById('ai-key-gate');
-  const chatPanel = document.getElementById('ai-chat-panel');
-  if (getApiKey()) {
-    keyGate.style.display = 'none';
-    chatPanel.style.display = 'block';
-    if (!chatHistory.length) resetChat();
-  } else {
-    keyGate.style.display = 'block';
-    chatPanel.style.display = 'none';
-  }
-}
-
-function saveOnboardingKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key) return;
-  localStorage.setItem(API_KEY_STORE, key);
-  showToast('API key saved');
-  showAiPanel();
+  document.getElementById('ai-chat-panel').style.display = 'block';
+  if (!chatHistory.length) resetChat();
 }
 
 // ── CHAT ────────────────────────────────────────────────────────────────────
@@ -871,8 +823,6 @@ function chatKeydown(e) {
 
 async function sendChat() {
   if (chatBusy) return;
-  const key = getApiKey();
-  if (!key) { showError('Please save your Anthropic API key first.'); return; }
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text) return;
@@ -884,13 +834,9 @@ async function sendChat() {
   chatBusy = true;
   document.getElementById('chat-send').disabled = true;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: buildSystemPrompt(), messages: chatHistory })
-    });
-    if (!res.ok) { const err = await res.json().catch(()=>({})); throw new Error(err.error?.message||`API error ${res.status}`); }
-    const data = await res.json();
+    const proxy = firebase.functions().httpsCallable('anthropicProxy');
+    const result = await proxy({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: buildSystemPrompt(), messages: chatHistory });
+    const data = result.data;
     const reply = data.content[0]?.text || '';
     thinking.remove();
     if (reply.trim().startsWith('{')) {
