@@ -12,6 +12,7 @@ A personal AI-powered cookbook web app. Built as a functional tool and a BUSN 44
 Single HTML file (`index.html`) — no framework, no build step.
 
 - Firebase Hosting + Firestore + Firebase Auth (Google sign-in)
+- Firebase Cloud Functions (Anthropic API proxy)
 - Anthropic API (Claude-powered AI Kitchen)
 - Firebase compat SDK v10.12.0 via CDN script tags
 
@@ -31,7 +32,7 @@ Single HTML file (`index.html`) — no framework, no build step.
 - AI asks about cuisine preference before suggesting — no defaults
 - AI knows all published recipes before each conversation
 - AI mentions close existing matches naturally before generating
-- API key onboarding for new users
+- Server-side Anthropic API proxy — no client-side key required
 - Serving size scaler (real-time, resets on page open)
 - Print view (clean white stylesheet)
 - Expanded AI chat UI with auto-growing input
