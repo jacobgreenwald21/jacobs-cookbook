@@ -4,6 +4,17 @@ All notable changes to Jacob's Cookbook are documented here.
 
 ---
 
+## [1.2.0] — April 2026
+
+### Anthropic API Proxy (Cloud Function)
+- Added Firebase Cloud Function `anthropicProxy` that proxies all Anthropic API requests server-side
+- Anthropic API key stored as a Firebase Secret (never exposed to the client)
+- Removed API key onboarding screen — AI Kitchen loads directly for signed-in users
+- Upgraded Firebase project to Blaze plan to support Cloud Functions
+- Auth check enforced inside the function — unauthenticated requests are rejected
+
+---
+
 ## [1.1.0] — April 2026
 
 ### Related Recipes
