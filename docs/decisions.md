@@ -67,3 +67,13 @@ Key decisions made during development and the reasoning behind them.
 **Decision:** All feature work on `dev`. `main` always matches the live Firebase deployment. Merge only when stable.
 
 **Why:** Prevents broken code from reaching production. Firebase deploys from whatever branch you run `firebase deploy` on, so the branch discipline enforces production stability.
+
+---
+
+## Anthropic API Key Moved Server-Side via Cloud Function
+
+**Decision:** Replaced client-side API key storage (localStorage) with a Firebase Cloud Function proxy. The Anthropic API key is stored as a Firebase Secret and never reaches the browser.
+
+**Why:** The original localStorage approach was acceptable for a personal tool with known users, but absorbing API costs for all users required the key to be centralized. A Cloud Function proxy is the standard pattern for this — it keeps the key secure, allows cost control, and removes the onboarding friction of requiring users to supply their own key.
+
+**Tradeoff:** Adds infrastructure complexity (Cloud Functions, Blaze plan, gcloud IAM). Acceptable given the benefit.
