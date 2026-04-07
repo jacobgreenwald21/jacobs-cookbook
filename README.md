@@ -72,6 +72,4 @@ git checkout dev && git merge main && git push origin dev
 
 ## Critical IDs
 
-- **Admin UID:** `Ilqx5bsdUMdLQg9hPfDGIrZ7NXB3`
-- **Admin Gmail:** jacobgreenwald21@gmail.com
-- **Firebase project:** jacobs-cookbook
+Stored privately — not committed to this repo.
