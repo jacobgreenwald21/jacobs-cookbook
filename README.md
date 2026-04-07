@@ -3,7 +3,7 @@
 A personal AI-powered cookbook web app. Built as a functional tool and a BUSN 4400 class project.
 
 **Live:** https://jacobs-cookbook.web.app  
-**Version:** v1.1.0
+**Version:** v1.2.0
 
 ---
 
