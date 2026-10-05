@@ -794,7 +794,7 @@ async function sendChat() {
   chatBusy = true;
   document.getElementById('chat-send').disabled = true;
   try {
-    const proxy = firebase.functions().httpsCallable('anthropicProxy');
+    const proxy = firebase.functions().httpsCallable('anthropicProxy', { timeout: 120000 }); // match the function's 120s timeout (SDK default is 70s)
     const result = await proxy({ messages: chatHistory, prevMessageId: lastMessageId });
     const data = result.data;
     lastMessageId = data.id;
@@ -802,6 +802,8 @@ async function sendChat() {
     if (data.stop_reason === 'max_tokens') throw new Error('The reply got cut off. Try again.');
     // Replies can start with a thinking block, so read text blocks by type, not position.
     const reply = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
+    // An empty assistant turn would make every later request fail, so never add one to history.
+    if (!reply.trim()) throw new Error('Claude sent an empty reply. Try again.');
     thinking.remove();
     if (reply.trim().startsWith('{')) {
       try {
