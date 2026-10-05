@@ -12,7 +12,7 @@ Live: https://jacobs-cookbook.web.app · Firebase project: `jacobs-cookbook` · 
 - Firebase compat SDK v10.12.0 via CDN script tags (app, auth, firestore, functions)
 - Firebase Hosting (serves the project root; see the `firebase.json` ignore list)
 - Firestore + Firebase Auth (Google sign-in)
-- Cloud Function `anthropicProxy` (`functions/index.js`, Node 24, v2 `onCall`) — forwards AI Kitchen requests to the Anthropic API. Key lives in Firebase Secret `ANTHROPIC_KEY`, never in the browser. CORS locked to the live domain.
+- Cloud Function `anthropicProxy` (`functions/index.js`, Node 24, v2 `onCall`) — calls the Anthropic API through `@anthropic-ai/sdk`. It owns the model (`claude-sonnet-5-5`), `max_tokens`, effort, refusal fallback, and the system prompt (`CHAT_SYSTEM` + the published catalog read from Firestore, prompt-cached). The browser sends only chat messages and the previous response id. Each call logs token and cache usage (`firebase functions:log`). Key lives in Firebase Secret `ANTHROPIC_KEY`, never in the browser. CORS locked to the live domain.
 
 Earlier Next.js + Supabase and Lovable attempts were abandoned — see `docs/decisions.md`. Don't reintroduce a framework or build step.
 
@@ -22,7 +22,7 @@ Earlier Next.js + Supabase and Lovable attempts were abandoned — see `docs/dec
 - Auth: `signIn()`, `checkAllowedEditor(uid)`, favorites load/save
 - Browse: `applyFilters()` + `renderGrid()` — filtering and sorting are client-side on purpose (avoids Firestore composite-index failures)
 - Detail: `renderDetail()`, `renderEditDetail()`, serving scaler (`scaleIngredient`, `adjustServings`)
-- AI Kitchen: `buildSystemPrompt()` puts the full recipe catalog before `CHAT_SYSTEM` (the AI instructions); `sendChat()` calls the proxy with the model and `max_tokens` hardcoded; `finalizeRecipe()` → `renderDraft()` → `publishDraft()`. Drafts live only in memory until published.
+- AI Kitchen: `sendChat()` sends `chatHistory` to the proxy (prompt and model are server-side, see `functions/index.js`) and reads the reply from text blocks; `finalizeRecipe()` → `renderDraft()` → `publishDraft()`. Drafts live only in memory until published.
 
 ## Firestore
 
