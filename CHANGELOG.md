@@ -2,6 +2,42 @@
 
 All notable changes to Jacob's Cookbook are documented here.
 
+Starting with 5.0, versions follow the v5.0 plan (`docs/v5.0-plan.md`): each phase ships as 5.N, so phase 1 is 5.1. The jump from 1.2.0 reflects the overall iteration count, not a rewrite.
+
+---
+
+## [5.1] — October 2026
+
+### AI Kitchen upgrades
+- Model upgraded to Claude Sonnet 5.5 (`claude-sonnet-5-5`). Claude Sonnet 4 is retired on the Claude API, so AI Kitchen needed this to keep working
+- Output limit raised from 1,000 to 16,000 tokens so full recipes no longer get cut off
+- The Cloud Function now calls Claude through the official Anthropic SDK, which retries automatically on rate limits and server errors
+- Refusal fallback: if Sonnet ever declines a request, the API re-runs it on a fallback model
+- Replies are read by content type, so a thinking block never shows up as a blank reply. Refused, cut-off, and empty replies show a clear error instead
+
+### Proxy lockdown
+- Model, output limit, and effort are set in the Cloud Function. The browser can no longer choose them
+- The system prompt (cooking rules + recipe catalog) is built in the function from Firestore. The browser sends only the chat messages, so the cooking-only rules can't be swapped out
+- Chat history must be plain user/assistant text, capped at 60 messages or 60K characters
+
+### Prompt caching
+- System prompt split into fixed instructions, then the recipe catalog, with a cache breakpoint after it. The conversation is cached as it grows
+- From the second message on, about 8.5K tokens per message are read from cache at 10% of the normal input price
+- Every call logs token usage, cache reads and writes, and cache diagnostics (`firebase functions:log`)
+
+### Maintenance
+- Updated `firebase-functions` to 7.4.0 and `firebase-admin` to 13.10.0
+
+---
+
+## [5.0] — October 2026
+
+### Housekeeping
+- Rewrote `.claude/CLAUDE.md` to describe the real stack (single `index.html`, Firebase Hosting + Firestore + Auth, Cloud Function proxy)
+- Docs, markdown files, function source, and the archive folder are no longer served publicly by Firebase Hosting
+- Git remote no longer stores a GitHub token
+- Added the v5.0 plan (`docs/v5.0-plan.md`)
+
 ---
 
 ## [1.2.0] — April 2026
