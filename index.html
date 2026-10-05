@@ -748,9 +748,11 @@ function showAiPanel() {
 // ── CHAT ────────────────────────────────────────────────────────────────────
 let chatHistory = [];
 let chatBusy = false;
+let lastMessageId = null; // previous response id, for cache diagnostics
 
 function resetChat() {
   chatHistory = [];
+  lastMessageId = null;
   document.getElementById('chat-messages').innerHTML = '';
   document.getElementById('gen-draft').innerHTML = '';
   document.getElementById('gen-error').innerHTML = '';
@@ -793,8 +795,9 @@ async function sendChat() {
   document.getElementById('chat-send').disabled = true;
   try {
     const proxy = firebase.functions().httpsCallable('anthropicProxy');
-    const result = await proxy({ messages: chatHistory });
+    const result = await proxy({ messages: chatHistory, prevMessageId: lastMessageId });
     const data = result.data;
+    lastMessageId = data.id;
     if (data.stop_reason === 'refusal') throw new Error("Claude couldn't help with that one. Try rephrasing.");
     if (data.stop_reason === 'max_tokens') throw new Error('The reply got cut off. Try again.');
     // Replies can start with a thinking block, so read text blocks by type, not position.

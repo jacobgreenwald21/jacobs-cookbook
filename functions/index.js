@@ -80,7 +80,7 @@ exports.anthropicProxy = onCall(
       throw new HttpsError('unauthenticated', 'Must be signed in to use the AI Kitchen.');
     }
 
-    const { messages } = request.data;
+    const { messages, prevMessageId } = request.data;
     if (!isValidHistory(messages)) {
       throw new HttpsError('invalid-argument', 'Invalid chat history.');
     }
@@ -95,6 +95,12 @@ exports.anthropicProxy = onCall(
         output_config: { effort: EFFORT },
         // Automatic caching: a second breakpoint that follows the end of the conversation as it grows.
         cache_control: { type: 'ephemeral' },
+        // Cache diagnostics: sent on every turn (null on the first). The response reports where
+        // this request diverged from the previous one if the cache prefix broke.
+        diagnostics: {
+          previous_message_id: typeof prevMessageId === 'string' && /^msg_[A-Za-z0-9]+$/.test(prevMessageId)
+            ? prevMessageId : null,
+        },
         // If Sonnet declines a request, the API re-runs it on a fallback model. Shouldn't fire for cooking.
         betas: ['server-side-fallback-2026-07-01'],
         fallbacks: 'default',
@@ -110,6 +116,17 @@ exports.anthropicProxy = onCall(
       }
       throw new HttpsError('internal', 'Failed to reach Anthropic: ' + e.message);
     }
+
+    // View with `firebase functions:log`. Turn 2+ should show cacheRead > 0 and no cacheMissReason.
+    logger.info('AI Kitchen usage', {
+      model: response.model,
+      inputTokens: response.usage.input_tokens,
+      cacheRead: response.usage.cache_read_input_tokens,
+      cacheWrite: response.usage.cache_creation_input_tokens,
+      outputTokens: response.usage.output_tokens,
+      stopReason: response.stop_reason,
+      cacheMissReason: response.diagnostics?.cache_miss_reason ?? null,
+    });
 
     const fallbackRan = (response.usage.iterations ?? []).some(i => i.type === 'fallback_message');
     if (fallbackRan) {
