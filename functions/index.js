@@ -73,6 +73,14 @@ function isValidHistory(messages) {
     messages.every(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
 }
 
+// Real chats are a handful of short turns. The cap stops a caller from sending huge requests on our key.
+const MAX_MESSAGES = 60;
+const MAX_HISTORY_CHARS = 60000;
+function isTooLong(messages) {
+  return messages.length > MAX_MESSAGES ||
+    messages.reduce((n, m) => n + m.content.length, 0) > MAX_HISTORY_CHARS;
+}
+
 exports.anthropicProxy = onCall(
   { secrets: [anthropicKey], cors: ['https://jacobs-cookbook.web.app'], timeoutSeconds: 120 },
   async (request) => {
@@ -83,6 +91,9 @@ exports.anthropicProxy = onCall(
     const { messages, prevMessageId } = request.data;
     if (!isValidHistory(messages)) {
       throw new HttpsError('invalid-argument', 'Invalid chat history.');
+    }
+    if (isTooLong(messages)) {
+      throw new HttpsError('invalid-argument', 'This chat is too long. Start a new chat to keep going.');
     }
     const system = await buildSystemPrompt();
     const client = new Anthropic({ apiKey: anthropicKey.value() });
