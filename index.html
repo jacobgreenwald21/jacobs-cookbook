@@ -835,9 +835,12 @@ async function sendChat() {
   document.getElementById('chat-send').disabled = true;
   try {
     const proxy = firebase.functions().httpsCallable('anthropicProxy');
-    const result = await proxy({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: buildSystemPrompt(), messages: chatHistory });
+    const result = await proxy({ system: buildSystemPrompt(), messages: chatHistory });
     const data = result.data;
-    const reply = data.content[0]?.text || '';
+    if (data.stop_reason === 'refusal') throw new Error("Claude couldn't help with that one. Try rephrasing.");
+    if (data.stop_reason === 'max_tokens') throw new Error('The reply got cut off. Try again.');
+    // Replies can start with a thinking block, so read text blocks by type, not position.
+    const reply = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
     thinking.remove();
     if (reply.trim().startsWith('{')) {
       try {
