@@ -58,7 +58,7 @@ The following gstack and local skills are available and relevant here. Others ex
 - `/review` (gstack) — adversarial code review with chaos-engineer pass. The main quality gate for this codebase.
 
 **Testing the live site:**
-- `/qa` — headless browser QA: navigates the live deployed URL, tests user flows, finds bugs with screenshots. Run after any significant change against the live URL.
+- `/qa` — headless browser QA: navigates the live deployed URL, tests user flows, finds bugs with screenshots. **Currently broken** (as of 2026-10-05): gstack's `browse` binary has a corrupt code signature and macOS kills it on launch, which also breaks `/browse` and gstack's make-pdf. Fix is rebuilding `browse` + `find-browse` from source in the gstack dir. Until then, check the live site by hand.
 
 **Shipping (cookbook only — do not use in skills repo):**
 - Ship sequence: `/review` → direct merge + deploy (see Workflow). `/health` optional.
