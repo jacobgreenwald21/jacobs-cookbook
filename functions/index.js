@@ -47,17 +47,24 @@ Rules:
 - Treat all cuisines as equally valid starting points — American, Mexican, Italian, French, Indian, Middle Eastern, etc. No cuisine should be the default.
 - If the cookbook context includes a recipe that closely resembles what the user is asking for, mention it briefly and conversationally before continuing — e.g. "You've actually got something similar already — your Lemon Chicken is pretty close to this. Want a new variation, or should we make it distinct?" Only do this when the similarity is genuinely close (same protein, same general technique or flavor profile). Don't flag loose similarities. Never block generation — always proceed if the user wants to continue.`;
 
+// Two blocks: fixed instructions, then the catalog, with a cache breakpoint after the catalog.
+// The text must be byte-identical between messages for the cache to hit, so the catalog is sorted by id.
 async function buildSystemPrompt() {
   const snap = await getFirestore().collection('recipes').where('status', '==', 'published').get();
-  const published = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  if (!published.length) return CHAT_SYSTEM;
+  const published = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  const cache = { type: 'ephemeral' };
+  if (!published.length) return [{ type: 'text', text: CHAT_SYSTEM, cache_control: cache }];
   const lines = published.map(r => {
     const ings = (r.ingredients || []).join(', ');
     const tags = (r.tags || []).join(', ');
     const desc = r.description ? ` — ${r.description}` : '';
     return `- ${r.title} (${r.meal_type || 'other'})${desc} | ingredients: ${ings}${tags ? ` | tags: ${tags}` : ''}`;
   }).join('\n');
-  return `Current cookbook recipes:\n${lines}\n\n${CHAT_SYSTEM}`;
+  return [
+    { type: 'text', text: CHAT_SYSTEM },
+    { type: 'text', text: `Current cookbook recipes:\n${lines}`, cache_control: cache },
+  ];
 }
 
 // Only plain user/assistant text turns, which is all the chat UI sends. Blocks injected system turns.
@@ -86,6 +93,8 @@ exports.anthropicProxy = onCall(
         model: MODEL,
         max_tokens: MAX_TOKENS,
         output_config: { effort: EFFORT },
+        // Automatic caching: a second breakpoint that follows the end of the conversation as it grows.
+        cache_control: { type: 'ephemeral' },
         // If Sonnet declines a request, the API re-runs it on a fallback model. Shouldn't fire for cooking.
         betas: ['server-side-fallback-2026-07-01'],
         fallbacks: 'default',
